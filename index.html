@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="QR Code Event Management System — генерація та сканування QR кодів для управління учасниками подій" />
+  <title>QR Event Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">QR Event</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Згорнути меню">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="nav" id="mainNav">
+        <a href="#dashboard" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Дашборд</span>
+        </a>
+        <a href="#import" class="nav-item" data-page="import">
+          <span class="nav-icon">📥</span>
+          <span class="nav-label">Імпорт</span>
+        </a>
+        <a href="#participants" class="nav-item" data-page="participants">
+          <span class="nav-icon">👥</span>
+          <span class="nav-label">Учасники</span>
+        </a>
+        <a href="#collectives" class="nav-item" data-page="collectives">
+          <span class="nav-icon">🏫</span>
+          <span class="nav-label">Колективи</span>
+        </a>
+        <a href="#qrcodes" class="nav-item" data-page="qrcodes">
+          <span class="nav-icon">🏷️</span>
+          <span class="nav-label">QR Коди</span>
+        </a>
+        <a href="#scanner" class="nav-item" data-page="scanner">
+          <span class="nav-icon">📷</span>
+          <span class="nav-label">Сканер</span>
+        </a>
+        <a href="#log" class="nav-item" data-page="log">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Журнал</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-danger" id="clearDataBtn">
+          <span>🗑️</span>
+          <span class="nav-label">Очистити дані</span>
+        </button>
+      </div>
+    </aside>
+    <main class="main-content" id="mainContent">
+      <div class="page-container" id="pageContainer">
+        <!-- Pages rendered here by router -->
+      </div>
+    </main>
+  </div>
+  <div class="toast-container" id="toastContainer"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

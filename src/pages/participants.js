@@ -1,6 +1,7 @@
 import { getParticipants, addParticipants } from '../data/store.js';
 import { getDisplayName, getTypeLabel, getTypeBadgeClass } from '../data/qr-generator.js';
 import { formatDateTime, debounce, showToast } from '../utils/ui.js';
+import { showQRZoomModal } from './qrcodes.js';
 
 /**
  * Escapes HTML special characters to prevent XSS issues.
@@ -51,12 +52,12 @@ export async function renderParticipants(container) {
       <div class="page-header">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3);">
           <div>
-            <h1 class="page-title page-title-gradient">Учасники</h1>
-            <p class="page-subtitle">Всі зареєстровані учасники події</p>
+            <h1 class="page-title page-title-gradient">Учасники та Гості</h1>
+            <p class="page-subtitle">Всі зареєстровані учасники, гості та партнери події</p>
           </div>
           <button type="button" class="btn btn-primary" id="addParticipantBtn">
             <span>➕</span>
-            <span>Додати учасника</span>
+            <span>Зареєструвати гостя / учасника</span>
           </button>
         </div>
       </div>
@@ -65,9 +66,12 @@ export async function renderParticipants(container) {
     // Bind add participant
     container.querySelector('#addParticipantBtn').addEventListener('click', async () => {
       const result = await showAddParticipantModal();
-      if (result) {
-        await addParticipants(result);
-        showToast('Учасника додано', 'success');
+      if (result && result.participant) {
+        await addParticipants(result.participant);
+        showToast('Учасника/гостя додано', 'success');
+        if (result.generateQR) {
+          await showQRZoomModal(result.participant);
+        }
         await renderParticipants(container);
       }
     });
@@ -78,10 +82,10 @@ export async function renderParticipants(container) {
     emptyDiv.innerHTML = `
       <span class="empty-state-icon">👥</span>
       <h2 class="empty-state-title">Учасників ще немає</h2>
-      <p class="empty-state-text">Імпортуйте список учасників з Excel або додайте вручну.</p>
+      <p class="empty-state-text">Імпортуйте список з Excel або зареєструйте гостя вручну.</p>
       <a href="#import" class="btn btn-secondary">
         <span>📥</span>
-        <span>Імпортувати учасників</span>
+        <span>Імпортувати з Excel</span>
       </a>
     `;
     container.appendChild(emptyDiv);
@@ -96,25 +100,28 @@ export async function renderParticipants(container) {
     <div class="page-header">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3);">
         <div>
-          <h1 class="page-title page-title-gradient">Учасники</h1>
-          <p class="page-subtitle">Всі зареєстровані учасники події</p>
+          <h1 class="page-title page-title-gradient">Учасники та Гості</h1>
+          <p class="page-subtitle">Всі зареєстровані учасники, гості та партнери події</p>
         </div>
         <button type="button" class="btn btn-primary" id="addParticipantBtn">
           <span>➕</span>
-          <span>Додати учасника</span>
+          <span>Зареєструвати гостя / учасника</span>
         </button>
       </div>
     </div>
 
     <div class="filter-bar">
       <div class="search-input">
-        <input type="text" id="participantSearch" placeholder="Пошук за іменем..." autocomplete="off" />
+        <input type="text" id="participantSearch" placeholder="Пошук за іменем, телефоном, організацією..." autocomplete="off" />
       </div>
       <div class="filter-chips" id="typeChips">
         <button type="button" class="chip active" data-type="all">Всі</button>
         <button type="button" class="chip" data-type="participant">Учасники</button>
         <button type="button" class="chip" data-type="collective_member">Колективи</button>
         <button type="button" class="chip" data-type="guest">Гості</button>
+        <button type="button" class="chip" data-type="designer">Дизайнери</button>
+        <button type="button" class="chip" data-type="sponsor">Спонсори</button>
+        <button type="button" class="chip" data-type="other">Інше</button>
       </div>
       <div class="filter-chips" id="statusChips">
         <button type="button" class="chip active" data-status="all">Всі статуси</button>
@@ -130,9 +137,9 @@ export async function renderParticipants(container) {
         <thead>
           <tr>
             <th style="width: 50px;">#</th>
-            <th>Ім'я</th>
+            <th>Ім'я / Назва</th>
             <th>Тип</th>
-            <th>Колектив</th>
+            <th>Організація / Колектив</th>
             <th>Категорія</th>
             <th>Статус</th>
             <th style="width: 70px; text-align: center;">QR</th>
@@ -158,8 +165,9 @@ export async function renderParticipants(container) {
       const lastName = (p.lastName || p.last_name || '').toLowerCase();
       const fullName = `${firstName} ${lastName}`.trim();
       const collectiveName = (p.collectiveName || p.collective_name || '').toLowerCase();
-      const organization = (p.organization || '').toLowerCase();
-      const choreographer = (p.choreographer || '').toLowerCase();
+      const organization = (p.organization || p.school || '').toLowerCase();
+      const phone = (p.phone || '').toLowerCase();
+      const category = (p.category || '').toLowerCase();
 
       const matched =
         displayName.includes(q) ||
@@ -168,7 +176,8 @@ export async function renderParticipants(container) {
         lastName.includes(q) ||
         collectiveName.includes(q) ||
         organization.includes(q) ||
-        choreographer.includes(q);
+        phone.includes(q) ||
+        category.includes(q);
 
       if (!matched) return false;
     }
@@ -199,7 +208,7 @@ export async function renderParticipants(container) {
         <tr>
           <td colspan="7" style="text-align: center; padding: var(--space-8); color: var(--text-secondary);">
             <div style="font-size: 2rem; margin-bottom: var(--space-2); opacity: 0.6;">🔍</div>
-            <div>Учасників за вибраними фільтрами не знайдено</div>
+            <div>За вибраними фільтрами записів не знайдено</div>
           </td>
         </tr>
       `;
@@ -211,7 +220,7 @@ export async function renderParticipants(container) {
         const name = escapeHtml(getDisplayName(p));
         const typeLabel = escapeHtml(getTypeLabel(p.type));
         const typeBadgeClass = escapeHtml(getTypeBadgeClass(p.type));
-        const collective = escapeHtml(p.collectiveName || p.collective_name || '—');
+        const collective = escapeHtml(p.collectiveName || p.collective_name || p.organization || p.school || '—');
         const category = escapeHtml(p.category || '—');
         const isChecked = Boolean(p.checkedIn);
         const statusHtml = isChecked
@@ -277,9 +286,12 @@ export async function renderParticipants(container) {
   if (addBtn) {
     addBtn.addEventListener('click', async () => {
       const result = await showAddParticipantModal();
-      if (result) {
-        await addParticipants(result);
-        showToast('Учасника додано', 'success');
+      if (result && result.participant) {
+        await addParticipants(result.participant);
+        showToast('Зареєстровано успішно', 'success');
+        if (result.generateQR) {
+          await showQRZoomModal(result.participant);
+        }
         await renderParticipants(container);
       }
     });
@@ -289,10 +301,11 @@ export async function renderParticipants(container) {
 }
 
 /**
- * Show a modal to quickly add a new participant.
- * @returns {Promise<object|null>} - Participant object or null if cancelled.
+ * Show a modal to quickly register a new guest, participant, designer, sponsor, etc.
+ * @param {string} [defaultType='guest']
+ * @returns {Promise<{ participant: object, generateQR: boolean }|null>}
  */
-function showAddParticipantModal() {
+export function showAddParticipantModal(defaultType = 'guest') {
   return new Promise((resolve) => {
     if (document.querySelector('.modal-backdrop')) {
       resolve(null);
@@ -303,13 +316,31 @@ function showAddParticipantModal() {
     backdrop.className = 'modal-backdrop';
 
     backdrop.innerHTML = `
-      <div class="modal" style="max-width: 520px; width: 100%; padding: var(--space-6);">
+      <div class="modal" style="max-width: 540px; width: 100%; padding: var(--space-6);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
-          <h3 class="modal-title" style="margin: 0;">➕ Додати учасника</h3>
+          <h3 class="modal-title" style="margin: 0;">✨ Реєстрація гостя / учасника</h3>
           <button type="button" class="btn btn-ghost" id="modalCloseX" style="font-size: 1.2rem; padding: 4px 8px;">✕</button>
         </div>
 
         <form id="addParticipantForm" autocomplete="off">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
+            <div class="form-group">
+              <label class="form-label" for="apType">Категорія / Тип *</label>
+              <select class="form-input" id="apType">
+                <option value="guest" ${defaultType === 'guest' ? 'selected' : ''}>🌟 Гість</option>
+                <option value="participant" ${defaultType === 'participant' ? 'selected' : ''}>🎭 Учасник</option>
+                <option value="collective_member" ${defaultType === 'collective_member' ? 'selected' : ''}>👯 Член колективу</option>
+                <option value="designer" ${defaultType === 'designer' ? 'selected' : ''}>🎨 Дизайнер</option>
+                <option value="sponsor" ${defaultType === 'sponsor' ? 'selected' : ''}>💼 Спонсор</option>
+                <option value="other" ${defaultType === 'other' ? 'selected' : ''}>❓ Інше</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="apCategory">Номінація / Категорія</label>
+              <input type="text" class="form-input" id="apCategory" placeholder="напр. VIP, Mini, Показ" />
+            </div>
+          </div>
+
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
             <div class="form-group">
               <label class="form-label" for="apFirstName">Ім'я *</label>
@@ -323,38 +354,28 @@ function showAddParticipantModal() {
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
             <div class="form-group">
-              <label class="form-label" for="apType">Тип *</label>
-              <select class="form-input" id="apType">
-                <option value="participant">🎭 Учасник</option>
-                <option value="collective_member">👯 Член колективу</option>
-                <option value="guest">🌟 Гість</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="apCategory">Категорія</label>
-              <input type="text" class="form-input" id="apCategory" placeholder="Юніори" />
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
-            <div class="form-group">
               <label class="form-label" for="apPhone">Телефон</label>
               <input type="tel" class="form-input" id="apPhone" placeholder="+380671234567" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="apCollective">Колектив / Школа</label>
-              <input type="text" class="form-input" id="apCollective" placeholder="TopChildren" />
+              <label class="form-label" for="apCollective">Організація / Колектив / Школа</label>
+              <input type="text" class="form-input" id="apCollective" placeholder="напр. TopChildren / Vogue Studio" />
             </div>
           </div>
 
           <div class="form-group" style="margin-bottom: var(--space-5);">
-            <label class="form-label" for="apEmail">Email</label>
-            <input type="email" class="form-input" id="apEmail" placeholder="email@example.com" />
+            <label class="form-label" for="apEmail">Email / Соцмережі</label>
+            <input type="text" class="form-input" id="apEmail" placeholder="email@example.com або @instagram" />
           </div>
 
-          <div style="display: flex; gap: var(--space-3); justify-content: flex-end;">
+          <div style="display: flex; gap: var(--space-2); justify-content: flex-end; flex-wrap: wrap;">
             <button type="button" class="btn btn-secondary" id="modalCancelBtn">Скасувати</button>
-            <button type="submit" class="btn btn-primary">💾 Зберегти</button>
+            <button type="button" class="btn btn-secondary" id="saveAndQrBtn" style="border-color: var(--accent-primary-light); color: var(--accent-primary-light);">
+              🏷️ Зберегти та показати QR
+            </button>
+            <button type="submit" class="btn btn-primary" id="saveOnlyBtn">
+              💾 Зберегти
+            </button>
           </div>
         </form>
       </div>
@@ -382,9 +403,7 @@ function showAddParticipantModal() {
       if (e.target === backdrop) close(null);
     });
 
-    backdrop.querySelector('#addParticipantForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-
+    const createParticipantFromForm = (generateQR = false) => {
       const firstName = backdrop.querySelector('#apFirstName').value.trim();
       const lastName = backdrop.querySelector('#apLastName').value.trim();
       const type = backdrop.querySelector('#apType').value;
@@ -393,7 +412,7 @@ function showAddParticipantModal() {
       const collectiveName = backdrop.querySelector('#apCollective').value.trim();
       const email = backdrop.querySelector('#apEmail').value.trim();
 
-      if (!firstName) return;
+      if (!firstName) return null;
 
       const participant = {
         id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
@@ -406,12 +425,26 @@ function showAddParticipantModal() {
         collectiveName: collectiveName || null,
         choreographer: null,
         memberIndex: null,
-        qrGenerated: false,
+        organization: collectiveName || null,
+        choreographer: null,
+        memberIndex: null,
+        qrGenerated: Boolean(generateQR),
         checkedIn: false,
         checkedInAt: null,
       };
 
-      close(participant);
+      return { participant, generateQR };
+    };
+
+    backdrop.querySelector('#saveAndQrBtn').addEventListener('click', () => {
+      const res = createParticipantFromForm(true);
+      if (res) close(res);
+    });
+
+    backdrop.querySelector('#addParticipantForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const res = createParticipantFromForm(false);
+      if (res) close(res);
     });
   });
 }

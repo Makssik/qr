@@ -635,6 +635,21 @@ table {
   color: var(--warning);
 }
 
+.badge-designer {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.badge-sponsor {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.badge-other {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+
 .badge-success {
   background: var(--success-bg);
   color: var(--success);

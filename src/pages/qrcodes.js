@@ -395,7 +395,7 @@ export async function renderQRCodes(container) {
  * @param {object} participant
  * @param {Function} [onClose] - Optional callback when modal is closed.
  */
-async function showQRZoomModal(participant, onClose) {
+export async function showQRZoomModal(participant, onClose) {
   if (document.querySelector('.modal-backdrop')) {
     if (onClose) onClose();
     return;

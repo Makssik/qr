@@ -2,8 +2,11 @@
  * Dashboard Page
  * Displays overall event statistics, registration progress, quick actions, and recent scans.
  */
-import { getStats, getParticipants, getScanLog } from '../data/store.js';
+import { getStats, getParticipants, getScanLog, addParticipants } from '../data/store.js';
 import { navigateTo } from '../router.js';
+import { showAddParticipantModal } from './participants.js';
+import { showQRZoomModal } from './qrcodes.js';
+import { showToast } from '../utils/ui.js';
 
 /**
  * Format timestamp to a human readable time string.
@@ -20,7 +23,7 @@ function formatScanTime(timestamp) {
       second: '2-digit'
     });
   } catch {
-    return String(timestamp);
+    return '—';
   }
 }
 
@@ -37,8 +40,14 @@ function getTypeBadge(type) {
       return '<span class="badge badge-collective">Колектив</span>';
     case 'guest':
       return '<span class="badge badge-guest">Гість</span>';
+    case 'designer':
+      return '<span class="badge badge-designer">Дизайнер</span>';
+    case 'sponsor':
+      return '<span class="badge badge-sponsor">Спонсор</span>';
+    case 'other':
+      return '<span class="badge badge-other">Інше</span>';
     default:
-      return `<span class="badge badge-participant">${escapeHtml(type || 'Учасник')}</span>`;
+      return '<span class="badge badge-participant">Учасник</span>';
   }
 }
 
@@ -50,17 +59,13 @@ function getTypeBadge(type) {
 function getStatusBadge(status) {
   switch (status) {
     case 'success':
-    case 'checked_in':
       return '<span class="badge badge-success">✅ Успішно</span>';
     case 'warning':
-    case 'already_checked_in':
       return '<span class="badge badge-guest">⚠️ Повторно</span>';
     case 'error':
-    case 'invalid':
-    case 'not_found':
-      return '<span class="badge badge-error">❌ Помилка</span>';
+      return '<span class="badge badge-error">❌ Заборонено</span>';
     default:
-      return `<span class="badge badge-success">${escapeHtml(status || 'Успішно')}</span>`;
+      return '<span class="badge">—</span>';
   }
 }
 
@@ -103,22 +108,41 @@ export async function renderDashboard(container) {
     container.innerHTML = `
       <div class="page-header">
         <h1 class="page-title"><span class="page-title-gradient">Дашборд</span></h1>
-        <p class="page-subtitle">Загальна статистика події</p>
+        <p class="page-subtitle">Вітаємо у системі QR Event Manager</p>
       </div>
 
       <div class="card empty-state">
-        <span class="empty-state-icon">📋</span>
-        <h2 class="empty-state-title">Немає зареєстрованих учасників</h2>
-        <p class="empty-state-text">Імпортуйте список учасників з Excel файлу, щоб почати роботу з подією та генерувати QR-коди.</p>
-        <button class="btn btn-primary btn-lg" id="dashboardEmptyImportBtn" style="margin-top: var(--space-4);">
-          📥 Імпортувати дані
-        </button>
+        <span class="empty-state-icon">⚡</span>
+        <h2 class="empty-state-title">Подія порожня</h2>
+        <p class="empty-state-text">Імпортуйте Excel файл з учасниками або додайте першого гостя вручну.</p>
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center;">
+          <button class="btn btn-primary btn-lg" id="emptyRegisterBtn">
+            ✨ Зареєструвати гостя
+          </button>
+          <a href="#import" class="btn btn-secondary btn-lg" id="emptyImportBtn">
+            <span>📥</span>
+            <span>Імпортувати з Excel</span>
+          </a>
+        </div>
       </div>
     `;
 
-    const emptyImportBtn = container.querySelector('#dashboardEmptyImportBtn');
+    container.querySelector('#emptyRegisterBtn').addEventListener('click', async () => {
+      const result = await showAddParticipantModal('guest');
+      if (result && result.participant) {
+        await addParticipants(result.participant);
+        showToast('Зареєстровано успішно', 'success');
+        if (result.generateQR) {
+          await showQRZoomModal(result.participant);
+        }
+        await renderDashboard(container);
+      }
+    });
+
+    const emptyImportBtn = container.querySelector('#emptyImportBtn');
     if (emptyImportBtn) {
-      emptyImportBtn.addEventListener('click', () => {
+      emptyImportBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         navigateTo('import');
       });
     }
@@ -133,8 +157,8 @@ export async function renderDashboard(container) {
   if (recentScans.length === 0) {
     recentScansHtml = `
       <div style="text-align: center; padding: var(--space-8); color: var(--text-tertiary);">
-        <span style="font-size: 2rem; display: block; margin-bottom: var(--space-2); opacity: 0.5;">🕒</span>
-        <p>Журнал сканувань порожній. Відскануйте QR-код для початку фіксації реєстрацій.</p>
+        <span style="font-size: 2rem; display: block; margin-bottom: var(--space-2); opacity: 0.5;">📷</span>
+        <p>Сканувань ще не було. Відкрийте сканер для початку реєстрації входу.</p>
       </div>
     `;
   } else {
@@ -254,8 +278,11 @@ export async function renderDashboard(container) {
         <button class="btn btn-primary btn-lg" id="dashboardScanBtn">
           📷 Сканувати QR
         </button>
+        <button class="btn btn-secondary btn-lg" id="dashboardRegisterBtn" style="border-color: var(--accent-primary-light); color: var(--accent-primary-light);">
+          ✨ Зареєструвати гостя / VIP
+        </button>
         <button class="btn btn-secondary btn-lg" id="dashboardImportBtn">
-          📥 Імпортувати дані
+          📥 Імпортувати з Excel
         </button>
       </div>
     </div>
@@ -275,6 +302,21 @@ export async function renderDashboard(container) {
   if (scanBtn) {
     scanBtn.addEventListener('click', () => {
       navigateTo('scanner');
+    });
+  }
+
+  const registerBtn = container.querySelector('#dashboardRegisterBtn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', async () => {
+      const result = await showAddParticipantModal('guest');
+      if (result && result.participant) {
+        await addParticipants(result.participant);
+        showToast('Зареєстровано успішно', 'success');
+        if (result.generateQR) {
+          await showQRZoomModal(result.participant);
+        }
+        await renderDashboard(container);
+      }
     });
   }
 

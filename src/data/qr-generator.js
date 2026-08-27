@@ -189,6 +189,12 @@ export function getTypeLabel(type) {
       return 'Колектив';
     case 'guest':
       return 'Гість';
+    case 'designer':
+      return 'Дизайнер';
+    case 'sponsor':
+      return 'Спонсор';
+    case 'other':
+      return 'Інше';
     default:
       return 'Учасник';
   }
@@ -197,7 +203,7 @@ export function getTypeLabel(type) {
 /**
  * Returns CSS badge class for participant type.
  *
- * @param {string} type - Participant type ('participant' | 'collective_member' | 'guest').
+ * @param {string} type - Participant type ('participant' | 'collective_member' | 'guest' | 'designer' | 'sponsor' | 'other').
  * @returns {string} CSS class name.
  */
 export function getTypeBadgeClass(type) {
@@ -208,6 +214,12 @@ export function getTypeBadgeClass(type) {
       return 'badge-collective';
     case 'guest':
       return 'badge-guest';
+    case 'designer':
+      return 'badge-designer';
+    case 'sponsor':
+      return 'badge-sponsor';
+    case 'other':
+      return 'badge-other';
     default:
       return 'badge-participant';
   }

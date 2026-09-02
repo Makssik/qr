@@ -1,6 +1,6 @@
 {
-  "adminPassword": "admin",
-  "scannerPin": "1234",
+  "adminPassword": "AdminTFF@0",
+  "scannerPin": "7564",
   "sessions": {
     "scanner_adc4e272872428a480bd1c555adeb6c2ea7a106a6667ff9e": {
       "role": "scanner",
@@ -11,6 +11,26 @@
       "role": "admin",
       "createdAt": 1788357749281,
       "expiresAt": 1788962549281
+    },
+    "scanner_2223ef81be6f463819203c328667bb92561ef6a31050eadc": {
+      "role": "scanner",
+      "createdAt": 1788358024038,
+      "expiresAt": 1788962824038
+    },
+    "admin_f9055a44bf3fff26d0f07b00cbb3aa6e4b17b4c60b9126ae": {
+      "role": "admin",
+      "createdAt": 1788358049341,
+      "expiresAt": 1788962849341
+    },
+    "scanner_cf6c1ddef58f49eda94a781c2506b10397e5fa46f796ac89": {
+      "role": "scanner",
+      "createdAt": 1788358130569,
+      "expiresAt": 1788962930569
+    },
+    "admin_1207c84eb1b48115746086084117bda1a2df22b5f6787255": {
+      "role": "admin",
+      "createdAt": 1788358153265,
+      "expiresAt": 1788962953265
     }
   }
 }

@@ -31,3 +31,8 @@ dist-ssr
 .vite/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Backups
+backups/
+*.backup.json
+

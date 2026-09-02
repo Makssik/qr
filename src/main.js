@@ -48,7 +48,7 @@ function updateRoleUI() {
 
   if (role === 'admin') {
     if (roleIcon) roleIcon.textContent = '👑';
-    if (roleText) roleText.textContent = 'Організатор';
+    if (roleText) roleText.textContent = 'Адміністратор';
     if (authSettingsBtn) authSettingsBtn.style.display = 'flex';
     if (clearDataBtn) clearDataBtn.style.display = 'flex';
 

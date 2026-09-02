@@ -29,7 +29,7 @@ export function renderLogin(container) {
           </button>
           <button type="button" class="login-tab" id="tabAdmin">
             <span>👑</span>
-            <span>Організатор</span>
+            <span>Адміністратор</span>
           </button>
         </div>
 
@@ -98,7 +98,7 @@ export function renderLogin(container) {
 
           <button type="submit" class="btn btn-primary btn-lg" id="adminSubmitBtn" style="width: 100%; margin-top: var(--space-4);">
             <span>👑</span>
-            <span>Увійти як Організатор</span>
+            <span>Увійти як Адміністратор</span>
           </button>
         </form>
       </div>
@@ -215,11 +215,11 @@ export function renderLogin(container) {
 
     const result = await login({ password });
     if (result.success) {
-      showToast('Успішний вхід як Організатор!', 'success');
+      showToast('Успішний вхід як Адміністратор!', 'success');
       navigateTo('dashboard');
     } else {
       btn.disabled = false;
-      btn.innerHTML = '<span>👑</span><span>Увійти як Організатор</span>';
+      btn.innerHTML = '<span>👑</span><span>Увійти як Адміністратор</span>';
       showError(adminError, result.error || 'Невірний пароль');
       adminPasswordInput.value = '';
       adminPasswordInput.focus();

@@ -31,6 +31,11 @@
       "role": "admin",
       "createdAt": 1788358153265,
       "expiresAt": 1788962953265
+    },
+    "scanner_92732693f1dbf097d6278281ed4531d2cc9086e0bdb92fb4": {
+      "role": "scanner",
+      "createdAt": 1788360980500,
+      "expiresAt": 1788965780500
     }
   }
 }

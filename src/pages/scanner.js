@@ -1,6 +1,6 @@
 import { Html5Qrcode } from 'html5-qrcode';
 import jsQR from 'jsqr';
-import { parseQRData, getDisplayName, getTypeLabel, getTypeBadgeClass } from '../data/qr-generator.js';
+import { parseQRData, getDisplayName, getTypeLabel, getTypeBadgeClass, getCategoryMeta } from '../data/qr-generator.js';
 import { verifySignature } from '../utils/crypto.js';
 import { getParticipantById, updateParticipant, addScanEntry, getParticipants } from '../data/store.js';
 import { playSuccess, playWarning, playError } from '../utils/sound.js';
@@ -87,10 +87,10 @@ function showCheckInModal(participant, displayName) {
     backdrop.className = 'modal-backdrop';
 
     const pType = participant.type || 'participant';
-    const typeLabel = getTypeLabel(pType);
-    const badgeClass = getTypeBadgeClass(pType);
-    const school = participant.school || participant.collectiveName || '';
-    const phone = participant.phone || '';
+    const categoryMeta = getCategoryMeta(pType);
+    const roleTitle = participant.roleName || categoryMeta.label;
+    const organization = participant.organization || participant.school || participant.collectiveName || '';
+    const phone = participant.phone || participant.parentPhone || '';
     const parent = participant.parentName ? `${participant.parentName} (${participant.parentPhone || '—'})` : '';
     const isFirstTime = !participant.checkedIn;
     const wasDenied = Boolean(participant.accessDenied);
@@ -104,7 +104,7 @@ function showCheckInModal(participant, displayName) {
     }
 
     const deniedBannerHtml = wasDenied
-      ? `<div style="padding: var(--space-3); background: rgba(239, 68, 68, 0.15); border: 1px solid var(--error); border-radius: var(--radius-md); color: #f87171; font-weight: 700; text-align: center; margin-bottom: var(--space-2);">
+      ? `<div style="padding: var(--space-3); background: rgba(239, 68, 68, 0.15); border: 1px solid var(--error); border-radius: var(--radius-md); color: #f87171; font-weight: 700; text-align: center; margin-bottom: var(--space-3);">
            ⛔ УВАГА: Цьому учаснику раніше було ЗАБОРОНЕНО вхід!
            ${participant.accessDeniedAt ? `<div style="font-size:0.85em; font-weight:normal; margin-top:2px;">Час відмови: ${formatTime(participant.accessDeniedAt)}</div>` : ''}
          </div>`
@@ -114,29 +114,73 @@ function showCheckInModal(participant, displayName) {
     const repeatStyle = isFirstTime ? 'opacity: 0.4; cursor: not-allowed; filter: grayscale(0.5);' : '';
 
     backdrop.innerHTML = `
-      <div class="modal" style="max-width: 500px; width: 100%;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-          <h3 class="modal-title" style="margin: 0;">👤 Вхідний контроль</h3>
-          <span class="badge ${badgeClass}">${typeLabel}</span>
+      <div class="modal" style="max-width: 520px; width: 100%;">
+        <!-- Category Banner -->
+        <div style="background: ${categoryMeta.bgLight}; border: 1.5px solid ${categoryMeta.border}; border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); font-weight: 800; font-size: var(--font-size-base); color: ${categoryMeta.color};">
+            <span style="font-size: 1.3rem;">${categoryMeta.icon}</span>
+            <span>${escapeHtml(roleTitle.toUpperCase())}</span>
+          </div>
+          <span style="font-size: var(--font-size-xs); background: ${categoryMeta.color}; color: white; padding: 2px 8px; border-radius: var(--radius-sm); font-weight: 700;">
+            ${escapeHtml(categoryMeta.label)}
+          </span>
         </div>
 
         <div class="modal-body" style="display: grid; gap: var(--space-3); font-size: var(--font-size-sm);">
           ${deniedBannerHtml}
-          <div style="font-size: var(--font-size-lg); font-weight: 700; color: var(--text-primary);">
+
+          <!-- Name -->
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); line-height: 1.2;">
             ${escapeHtml(displayName)}
           </div>
 
-          <div style="padding: var(--space-4); background: var(--bg-glass); border-radius: var(--radius-md); border: 1px solid var(--border-color); display: grid; gap: 6px;">
-            <div>Статус: ${checkedInStatus}</div>
-            ${school ? `<div>Школа / Колектив: <strong>${escapeHtml(school)}</strong></div>` : ''}
-            ${participant.category ? `<div>Категорія: <strong>${escapeHtml(participant.category)}</strong></div>` : ''}
-            ${participant.age ? `<div>Вік: <strong>${escapeHtml(participant.age)}</strong></div>` : ''}
-            ${phone ? `<div>Телефон: <strong>${escapeHtml(phone)}</strong></div>` : ''}
-            ${parent ? `<div>Батьки/Опікун: <strong>${escapeHtml(parent)}</strong></div>` : ''}
+          <!-- Key Details Card -->
+          <div style="padding: var(--space-4); background: var(--bg-glass); border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: grid; gap: var(--space-2);">
+            <div style="display: flex; align-items: center; gap: var(--space-2);">
+              <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Статус:</span>
+              <div>${checkedInStatus}</div>
+            </div>
+
+            ${organization ? `
+              <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Організація:</span>
+                <strong style="color: var(--text-primary); font-size: 1.05em;">${escapeHtml(organization)}</strong>
+              </div>
+            ` : ''}
+
+            ${phone ? `
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Номер:</span>
+                <a href="tel:${escapeHtml(phone)}" style="color: var(--accent-primary-light); font-weight: 700; text-decoration: none; font-size: 1.1em;">
+                  📞 ${escapeHtml(phone)}
+                </a>
+              </div>
+            ` : ''}
+
+            ${parent ? `
+              <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Батьки:</span>
+                <span>${escapeHtml(parent)}</span>
+              </div>
+            ` : ''}
+
+            ${participant.age ? `
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Вік:</span>
+                <span>${escapeHtml(participant.age)} років</span>
+              </div>
+            ` : ''}
+
+            ${participant.category ? `
+              <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                <span style="color: var(--text-tertiary); font-weight: 600; min-width: 100px;">Участь:</span>
+                <span style="color: var(--text-secondary);">${escapeHtml(participant.category)}</span>
+              </div>
+            ` : ''}
           </div>
         </div>
 
-        <div class="modal-actions" style="display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-5);">
+        <div class="modal-actions" style="display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-4);">
           <button type="button" class="btn btn-success btn-lg" id="btnAllow" style="width: 100%; justify-content: center; font-weight: 700;">
             🟢 Дозволити вхід
           </button>

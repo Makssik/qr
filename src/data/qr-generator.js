@@ -2,10 +2,98 @@ import QRCodeStyling from 'qr-code-styling';
 import { signData } from '../utils/crypto.js';
 
 /**
+ * Category color schemes for QR code styling and badges
+ */
+export const CATEGORY_THEMES = {
+  designer: {
+    label: 'Дизайнер',
+    icon: '👗',
+    color: '#D97706',
+    dotsColor: '#78350F',
+    cornerSquareColor: '#D97706',
+    cornerDotColor: '#F59E0B',
+    badgeClass: 'badge-designer',
+    bgLight: 'rgba(217, 119, 6, 0.15)',
+    border: 'rgba(217, 119, 6, 0.4)'
+  },
+  jury: {
+    label: 'Журі',
+    icon: '⚖️',
+    color: '#DC2626',
+    dotsColor: '#881337',
+    cornerSquareColor: '#DC2626',
+    cornerDotColor: '#EF4444',
+    badgeClass: 'badge-jury',
+    bgLight: 'rgba(220, 38, 38, 0.15)',
+    border: 'rgba(220, 38, 38, 0.4)'
+  },
+  photographer: {
+    label: 'Фото / Відео',
+    icon: '📸',
+    color: '#0284C7',
+    dotsColor: '#0C4A6E',
+    cornerSquareColor: '#0284C7',
+    cornerDotColor: '#38BDF8',
+    badgeClass: 'badge-photographer',
+    bgLight: 'rgba(2, 132, 199, 0.15)',
+    border: 'rgba(2, 132, 199, 0.4)'
+  },
+  partner: {
+    label: 'Партнер',
+    icon: '🤝',
+    color: '#EA580C',
+    dotsColor: '#7C2D12',
+    cornerSquareColor: '#EA580C',
+    cornerDotColor: '#FB923C',
+    badgeClass: 'badge-partner',
+    bgLight: 'rgba(234, 88, 12, 0.15)',
+    border: 'rgba(234, 88, 12, 0.4)'
+  },
+  guest: {
+    label: 'Запрошений гість',
+    icon: '🌟',
+    color: '#059669',
+    dotsColor: '#064E3B',
+    cornerSquareColor: '#059669',
+    cornerDotColor: '#10B981',
+    badgeClass: 'badge-guest',
+    bgLight: 'rgba(5, 150, 105, 0.15)',
+    border: 'rgba(5, 150, 105, 0.4)'
+  },
+  collective_member: {
+    label: 'Колектив',
+    icon: '🌸',
+    color: '#DB2777',
+    dotsColor: '#831843',
+    cornerSquareColor: '#DB2777',
+    cornerDotColor: '#F472B6',
+    badgeClass: 'badge-collective',
+    bgLight: 'rgba(219, 39, 119, 0.15)',
+    border: 'rgba(219, 39, 119, 0.4)'
+  },
+  participant: {
+    label: 'Учасник / Модель',
+    icon: '🟣',
+    color: '#7C3AED',
+    dotsColor: '#1E1B4B',
+    cornerSquareColor: '#7C3AED',
+    cornerDotColor: '#A78BFA',
+    badgeClass: 'badge-participant',
+    bgLight: 'rgba(124, 58, 237, 0.15)',
+    border: 'rgba(124, 58, 237, 0.4)'
+  }
+};
+
+/**
+ * Returns category metadata by type string.
+ */
+export function getCategoryMeta(type) {
+  const normType = String(type || 'participant').toLowerCase();
+  return CATEGORY_THEMES[normType] || CATEGORY_THEMES.participant;
+}
+
+/**
  * Generates signed JSON payload string for a participant.
- *
- * @param {object} participant - Participant object containing at least an id.
- * @returns {Promise<string>} Serialized JSON string with { id, v: 1, sig }.
  */
 export async function generateQRData(participant) {
   if (!participant || participant.id === undefined || participant.id === null) {
@@ -23,13 +111,11 @@ export async function generateQRData(participant) {
 }
 
 /**
- * Creates a styled QRCodeStyling instance with customizable presets.
- *
- * @param {string} data - Content string to encode in QR code.
- * @param {object} [options={}] - Custom overrides for QRCodeStyling options.
- * @returns {QRCodeStyling} Configured QRCodeStyling instance.
+ * Creates a styled QRCodeStyling instance with category-specific colors.
  */
-export function createStyledQR(data, options = {}) {
+export function createStyledQR(data, options = {}, participant = null) {
+  const theme = participant ? getCategoryMeta(participant.type) : CATEGORY_THEMES.participant;
+
   const mergedOptions = {
     width: 300,
     height: 300,
@@ -42,17 +128,17 @@ export function createStyledQR(data, options = {}) {
       errorCorrectionLevel: 'M'
     },
     dotsOptions: {
-      color: '#1e1b4b',
+      color: theme.dotsColor || '#1e1b4b',
       type: 'rounded',
       ...(options.dotsOptions || {}),
     },
     cornersSquareOptions: {
-      color: '#7C3AED',
+      color: theme.cornerSquareColor || '#7C3AED',
       type: 'extra-rounded',
       ...(options.cornersSquareOptions || {}),
     },
     cornersDotOptions: {
-      color: '#06B6D4',
+      color: theme.cornerDotColor || '#06B6D4',
       type: 'dot',
       ...(options.cornersDotOptions || {}),
     },
@@ -74,22 +160,15 @@ export function createStyledQR(data, options = {}) {
 
 /**
  * Combines payload generation and QR styling for a given participant.
- *
- * @param {object} participant - Participant object.
- * @param {object} [options={}] - Optional styling overrides.
- * @returns {Promise<{ qr: QRCodeStyling, data: string }>}
  */
 export async function generateQRForParticipant(participant, options = {}) {
   const data = await generateQRData(participant);
-  const qr = createStyledQR(data, options);
+  const qr = createStyledQR(data, options, participant);
   return { qr, data };
 }
 
 /**
  * Parses and validates scanned QR data string.
- *
- * @param {string} text - Raw text from QR scanner.
- * @returns {{ id: string|number, v: number, sig: string } | null}
  */
 export function parseQRData(text) {
   if (!text || typeof text !== 'string') {
@@ -121,13 +200,14 @@ export function parseQRData(text) {
 
 /**
  * Returns formatted human-readable display name for an attendee.
- *
- * @param {object} participant - Attendee record.
- * @returns {string} Formatted name.
  */
 export function getDisplayName(participant) {
   if (!participant || typeof participant !== 'object') {
     return 'Невідомий';
+  }
+
+  if (participant.fullName && typeof participant.fullName === 'string' && participant.fullName.trim()) {
+    return participant.fullName.trim();
   }
 
   const firstName = (participant.firstName || participant.first_name || '').trim();
@@ -136,91 +216,33 @@ export function getDisplayName(participant) {
   const memberIndex = participant.memberIndex ?? participant.member_index;
   const isCollectiveMember = participant.type === 'collective_member';
 
-  if (
-    isCollectiveMember &&
-    memberIndex !== null &&
-    memberIndex !== undefined &&
-    Number(memberIndex) > 0
-  ) {
-    if (firstName && collectiveName) {
-      return `${firstName} — ${collectiveName}`;
-    }
-    if (firstName) {
-      return firstName;
-    }
-    if (collectiveName) {
-      return collectiveName;
-    }
-    return 'Без імені';
-  }
-
-  // If fullName is directly available (e.g. ПІБ from single column), use it
-  if (participant.fullName && typeof participant.fullName === 'string' && participant.fullName.trim()) {
-    return participant.fullName.trim();
+  if (isCollectiveMember && memberIndex !== null && memberIndex !== undefined && Number(memberIndex) > 0) {
+    if (firstName && collectiveName) return `${firstName} — ${collectiveName}`;
+    if (firstName) return firstName;
+    if (collectiveName) return collectiveName;
+    return 'Учасник колективу';
   }
 
   const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
-  if (fullName) {
-    return fullName;
-  }
-
-  if (collectiveName) {
-    return collectiveName;
-  }
-
-  if (participant.name && typeof participant.name === 'string' && participant.name.trim()) {
-    return participant.name.trim();
-  }
+  if (fullName) return fullName;
+  if (collectiveName) return collectiveName;
+  if (participant.name) return participant.name.trim();
 
   return 'Без імені';
 }
 
 /**
  * Returns localized label for participant type.
- *
- * @param {string} type - Participant type ('participant' | 'collective_member' | 'guest').
- * @returns {string} Localized label in Ukrainian.
  */
 export function getTypeLabel(type) {
-  switch (type) {
-    case 'participant':
-      return 'Учасник';
-    case 'collective_member':
-      return 'Колектив';
-    case 'guest':
-      return 'Гість';
-    case 'designer':
-      return 'Дизайнер';
-    case 'sponsor':
-      return 'Спонсор';
-    case 'other':
-      return 'Інше';
-    default:
-      return 'Учасник';
-  }
+  const meta = getCategoryMeta(type);
+  return `${meta.icon} ${meta.label}`;
 }
 
 /**
  * Returns CSS badge class for participant type.
- *
- * @param {string} type - Participant type ('participant' | 'collective_member' | 'guest' | 'designer' | 'sponsor' | 'other').
- * @returns {string} CSS class name.
  */
 export function getTypeBadgeClass(type) {
-  switch (type) {
-    case 'participant':
-      return 'badge-participant';
-    case 'collective_member':
-      return 'badge-collective';
-    case 'guest':
-      return 'badge-guest';
-    case 'designer':
-      return 'badge-designer';
-    case 'sponsor':
-      return 'badge-sponsor';
-    case 'other':
-      return 'badge-other';
-    default:
-      return 'badge-participant';
-  }
+  const meta = getCategoryMeta(type);
+  return meta.badgeClass;
 }

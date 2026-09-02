@@ -1,13 +1,11 @@
 import { getParticipants, updateParticipant } from '../data/store.js';
-import { generateQRForParticipant, getDisplayName, getTypeLabel, getTypeBadgeClass } from '../data/qr-generator.js';
+import { generateQRForParticipant, getDisplayName, getTypeLabel, getTypeBadgeClass, getCategoryMeta, CATEGORY_THEMES } from '../data/qr-generator.js';
 import { showToast } from '../utils/ui.js';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 /**
  * Escapes HTML special characters to prevent XSS issues.
- * @param {string|number|null|undefined} value
- * @returns {string}
  */
 function escapeHtml(value) {
   if (value === null || value === undefined) return '';
@@ -21,17 +19,11 @@ function escapeHtml(value) {
 
 /**
  * Renders the QR Codes page.
- *
- * @param {HTMLElement} container - DOM container element.
- * @returns {Promise<null>}
  */
 export async function renderQRCodes(container) {
   let currentFilter = 'all';
   let renderId = 0;
 
-  /**
-   * Main render function for the page.
-   */
   async function render() {
     const currentRenderId = ++renderId;
     const participants = await getParticipants();
@@ -46,11 +38,7 @@ export async function renderQRCodes(container) {
         <div class="empty-state">
           <span class="empty-state-icon">🏷️</span>
           <h2 class="empty-state-title">Учасників ще немає</h2>
-          <p class="empty-state-text">Імпортуйте або додайте учасників для генерації QR кодів.</p>
-          <a href="#import" class="btn btn-primary">
-            <span>📥</span>
-            <span>Імпортувати учасників</span>
-          </a>
+          <p class="empty-state-text">Імпортуйте дані з Google Таблиці або файлу Excel.</p>
         </div>
       `;
       return;
@@ -58,29 +46,23 @@ export async function renderQRCodes(container) {
 
     const generatedParticipants = participants.filter((p) => Boolean(p.qrGenerated));
 
-    // If no QR codes generated yet across all participants
-    if (generatedParticipants.length === 0) {
-      container.innerHTML = `
-        <div class="page-header">
-          <h1 class="page-title page-title-gradient">QR Коди</h1>
-          <p class="page-subtitle">Генерація та завантаження QR кодів</p>
-        </div>
-        <div class="empty-state">
-          <span class="empty-state-icon">🏷️</span>
-          <h2 class="empty-state-title">QR коди ще не згенеровано</h2>
-          <p class="empty-state-text">Згенеруйте QR коди для всіх зареєстрованих учасників події (${participants.length}).</p>
-          <button type="button" class="btn btn-primary" id="emptyGenerateBtn">
-            <span>⚡</span>
-            <span>Створити всі QR</span>
-          </button>
-        </div>
-      `;
+    // Category count counters
+    const counts = {
+      all: generatedParticipants.length,
+      participant: 0,
+      guest: 0,
+      designer: 0,
+      photographer: 0,
+      partner: 0,
+      collective_member: 0
+    };
 
-      const emptyGenBtn = container.querySelector('#emptyGenerateBtn');
-      if (emptyGenBtn) {
-        emptyGenBtn.addEventListener('click', handleCreateAllQR);
+    for (const p of generatedParticipants) {
+      if (counts[p.type] !== undefined) {
+        counts[p.type]++;
+      } else {
+        counts.participant++;
       }
-      return;
     }
 
     // Filter generated participants by selected type
@@ -92,24 +74,38 @@ export async function renderQRCodes(container) {
     container.innerHTML = `
       <div class="page-header">
         <h1 class="page-title page-title-gradient">QR Коди</h1>
-        <p class="page-subtitle">Генерація та завантаження QR кодів</p>
+        <p class="page-subtitle">Всього кодів: <strong>${generatedParticipants.length}</strong> (синхронізовано з Google Таблицею)</p>
       </div>
 
       <div class="actions-bar">
-        <div class="filter-chips" id="qrFilterChips">
-          <button type="button" class="chip ${currentFilter === 'all' ? 'active' : ''}" data-type="all">Всі</button>
-          <button type="button" class="chip ${currentFilter === 'participant' ? 'active' : ''}" data-type="participant">Учасники</button>
-          <button type="button" class="chip ${currentFilter === 'collective_member' ? 'active' : ''}" data-type="collective_member">Колективи</button>
-          <button type="button" class="chip ${currentFilter === 'guest' ? 'active' : ''}" data-type="guest">Гості</button>
-        </div>
-        <div class="actions-bar-group">
-          <button type="button" class="btn btn-primary" id="btnCreateAll">
-            <span>⚡</span>
-            <span>Створити всі QR</span>
+        <div class="filter-chips" id="qrFilterChips" style="flex-wrap: wrap;">
+          <button type="button" class="chip ${currentFilter === 'all' ? 'active' : ''}" data-type="all">
+            Всі (${counts.all})
           </button>
-          <button type="button" class="btn btn-secondary" id="btnDownloadAll">
+          <button type="button" class="chip ${currentFilter === 'participant' ? 'active' : ''}" data-type="participant">
+            🟣 Моделі (${counts.participant})
+          </button>
+          <button type="button" class="chip ${currentFilter === 'guest' ? 'active' : ''}" data-type="guest">
+            🌟 Гості (${counts.guest})
+          </button>
+          <button type="button" class="chip ${currentFilter === 'designer' ? 'active' : ''}" data-type="designer">
+            👗 Дизайнери (${counts.designer})
+          </button>
+          <button type="button" class="chip ${currentFilter === 'photographer' ? 'active' : ''}" data-type="photographer">
+            📸 Фото/Відео (${counts.photographer})
+          </button>
+          <button type="button" class="chip ${currentFilter === 'partner' ? 'active' : ''}" data-type="partner">
+            🤝 Партнери (${counts.partner})
+          </button>
+          <button type="button" class="chip ${currentFilter === 'collective_member' ? 'active' : ''}" data-type="collective_member">
+            🌸 Колективи (${counts.collective_member})
+          </button>
+        </div>
+
+        <div class="actions-bar-group">
+          <button type="button" class="btn btn-secondary" id="btnDownloadCurrentZip">
             <span>📦</span>
-            <span>Завантажити всі ZIP</span>
+            <span>Завантажити ZIP (${currentFilter === 'all' ? 'Всі' : filtered.length})</span>
           </button>
           <button type="button" class="btn btn-ghost" id="btnPrint">
             <span>🖨️</span>
@@ -125,26 +121,32 @@ export async function renderQRCodes(container) {
             <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-8);">
               <span class="empty-state-icon">🔍</span>
               <h2 class="empty-state-title">Немає QR кодів</h2>
-              <p class="empty-state-text">За вибраним фільтром не знайдено згенерованих QR кодів.</p>
+              <p class="empty-state-text">За вибраною категорією не знайдено учасників.</p>
             </div>
           `
             : filtered
                 .map((p) => {
                   const name = escapeHtml(getDisplayName(p));
-                  const typeLabel = escapeHtml(getTypeLabel(p.type));
-                  const badgeClass = escapeHtml(getTypeBadgeClass(p.type));
+                  const meta = getCategoryMeta(p.type);
+                  const typeLabel = escapeHtml(p.roleName || meta.label);
+                  const org = escapeHtml(p.organization || p.school || '');
+                  const phone = escapeHtml(p.phone || '');
 
                   return `
-                    <div class="qr-card" data-participant-id="${p.id}">
-                      <div class="qr-image" style="width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                    <div class="qr-card" data-participant-id="${p.id}" style="border-top: 3px solid ${meta.color}; position: relative;">
+                      <div class="qr-image" style="width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md); cursor: zoom-in;">
                         <div class="spinner" style="width: 28px; height: 28px;"></div>
                       </div>
-                      <div class="qr-card-name" title="${name}">${name}</div>
-                      <div class="qr-card-type">
-                        <span class="badge ${badgeClass}">${typeLabel}</span>
+                      <div class="qr-card-name" title="${name}" style="font-size: var(--font-size-base); font-weight: 700; text-align: center; margin-top: 4px;">${name}</div>
+                      
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; width: 100%;">
+                        <span class="badge ${meta.badgeClass}" style="font-size: var(--font-size-xs);">${meta.icon} ${typeLabel}</span>
+                        ${org ? `<div style="font-size: var(--font-size-xs); color: var(--text-secondary); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;" title="${org}">🏫 ${org}</div>` : ''}
+                        ${phone ? `<div style="font-size: var(--font-size-xs); color: var(--text-tertiary); font-variant-numeric: tabular-nums;">📞 ${phone}</div>` : ''}
                       </div>
-                      <div class="qr-card-actions">
-                        <button type="button" class="btn btn-sm btn-secondary download-single-qr-btn" data-participant-id="${p.id}" title="Завантажити PNG">
+
+                      <div class="qr-card-actions" style="margin-top: 6px; width: 100%;">
+                        <button type="button" class="btn btn-sm btn-secondary download-single-qr-btn" data-participant-id="${p.id}" title="Завантажити PNG" style="width: 100%; justify-content: center;">
                           <span>⬇️</span>
                           <span>Завантажити</span>
                         </button>
@@ -157,7 +159,7 @@ export async function renderQRCodes(container) {
       </div>
     `;
 
-    // Bind action bar events
+    // Filter Chips
     const filterChipsEl = container.querySelector('#qrFilterChips');
     if (filterChipsEl) {
       filterChipsEl.addEventListener('click', (e) => {
@@ -168,16 +170,13 @@ export async function renderQRCodes(container) {
       });
     }
 
-    const btnCreateAll = container.querySelector('#btnCreateAll');
-    if (btnCreateAll) {
-      btnCreateAll.addEventListener('click', handleCreateAllQR);
+    // Download ZIP
+    const btnDownloadCurrentZip = container.querySelector('#btnDownloadCurrentZip');
+    if (btnDownloadCurrentZip) {
+      btnDownloadCurrentZip.addEventListener('click', () => handleDownloadZip(filtered, currentFilter));
     }
 
-    const btnDownloadAll = container.querySelector('#btnDownloadAll');
-    if (btnDownloadAll) {
-      btnDownloadAll.addEventListener('click', handleDownloadAllZip);
-    }
-
+    // Print
     const btnPrint = container.querySelector('#btnPrint');
     if (btnPrint) {
       btnPrint.addEventListener('click', () => {
@@ -185,7 +184,7 @@ export async function renderQRCodes(container) {
       });
     }
 
-    // Bind grid clicks (single download or zoom modal)
+    // Grid Clicks (zoom / download)
     let isZoomModalOpen = false;
     const gridContainer = container.querySelector('#qrGridContainer');
     if (gridContainer) {
@@ -196,26 +195,18 @@ export async function renderQRCodes(container) {
 
         if (!qrCard) return;
 
-        if (isZoomTarget) {
-          if (isZoomModalOpen || document.querySelector('.modal-backdrop')) return;
-          isZoomModalOpen = true;
-        }
-
         const pId = qrCard.dataset.participantId;
         const p = filtered.find((item) => String(item.id) === String(pId)) ||
                   (await getParticipants()).find((item) => String(item.id) === String(pId));
 
-        if (!p) {
-          isZoomModalOpen = false;
-          return;
-        }
+        if (!p) return;
 
         if (downloadBtn) {
           e.stopPropagation();
           try {
-            const { qr } = await generateQRForParticipant(p, { width: 400, height: 400 });
-            const rawName = getDisplayName(p).replace(/\s+/g, '_');
-            const typeLabel = getTypeLabel(p.type).replace(/\s+/g, '_');
+            const { qr } = await generateQRForParticipant(p, { width: 450, height: 450 });
+            const rawName = getDisplayName(p).replace(/[\\/:*?"<>|]+/g, '_').trim();
+            const typeLabel = (p.roleName || getCategoryMeta(p.type).label).replace(/[\\/:*?"<>|]+/g, '_');
             const fileName = `${rawName}_${typeLabel}`;
             qr.download({ name: fileName, extension: 'png' });
             showToast(`Завантажено QR для: ${getDisplayName(p)}`, 'success');
@@ -224,6 +215,8 @@ export async function renderQRCodes(container) {
             showToast('Помилка при завантаженні QR коду', 'error');
           }
         } else if (isZoomTarget) {
+          if (isZoomModalOpen || document.querySelector('.modal-backdrop')) return;
+          isZoomModalOpen = true;
           try {
             await showQRZoomModal(p, () => { isZoomModalOpen = false; });
           } finally {
@@ -233,7 +226,7 @@ export async function renderQRCodes(container) {
       });
     }
 
-    // Asynchronously generate and append QR codes to the cards
+    // Asynchronously generate and append styled QR codes
     for (const p of filtered) {
       if (currentRenderId !== renderId) break;
 
@@ -263,64 +256,11 @@ export async function renderQRCodes(container) {
   }
 
   /**
-   * Generates QR codes for all participants who do not have one yet.
+   * Bundles QR codes into a ZIP archive and triggers download.
    */
-  async function handleCreateAllQR() {
-    const participants = await getParticipants();
-    const pending = participants.filter((p) => !p.qrGenerated);
-
-    if (pending.length === 0) {
-      showToast('Усі QR коди вже створено', 'info');
-      return;
-    }
-
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.inset = '0';
-    overlay.style.zIndex = '9999';
-    overlay.style.background = 'rgba(10, 10, 26, 0.85)';
-    overlay.style.backdropFilter = 'blur(8px)';
-    overlay.innerHTML = `
-      <div class="spinner" style="width: 48px; height: 48px;"></div>
-      <div id="genProgressText" style="font-weight: 600; color: var(--text-primary); font-size: var(--font-size-base);">
-        Створення QR кодів... (0 / ${pending.length})
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const progressText = overlay.querySelector('#genProgressText');
-    let generatedCount = 0;
-
-    try {
-      for (let i = 0; i < pending.length; i++) {
-        const p = pending[i];
-        await generateQRForParticipant(p);
-        await updateParticipant(p.id, { qrGenerated: true });
-        generatedCount++;
-        if (progressText) {
-          progressText.textContent = `Створення QR кодів... (${generatedCount} / ${pending.length})`;
-        }
-      }
-      showToast(`Створено ${generatedCount} QR кодів`, 'success');
-    } catch (err) {
-      console.error('Error generating all QR codes:', err);
-      showToast('Помилка при створенні QR кодів', 'error');
-    } finally {
-      overlay.remove();
-      await render();
-    }
-  }
-
-  /**
-   * Bundles all generated QR codes into a ZIP archive and triggers download.
-   */
-  async function handleDownloadAllZip() {
-    const participants = await getParticipants();
-    const generatedList = participants.filter((p) => Boolean(p.qrGenerated));
-
-    if (generatedList.length === 0) {
-      showToast('Немає згенерованих QR кодів для завантаження', 'warning');
+  async function handleDownloadZip(listToDownload, categoryKey) {
+    if (!listToDownload || listToDownload.length === 0) {
+      showToast('Немає QR кодів для завантаження', 'warning');
       return;
     }
 
@@ -334,7 +274,7 @@ export async function renderQRCodes(container) {
     overlay.innerHTML = `
       <div class="spinner" style="width: 48px; height: 48px;"></div>
       <div id="zipProgressText" style="font-weight: 600; color: var(--text-primary); font-size: var(--font-size-base);">
-        Підготовка ZIP архіву... (0 / ${generatedList.length})
+        Підготовка ZIP архіву... (0 / ${listToDownload.length})
       </div>
     `;
     document.body.appendChild(overlay);
@@ -344,13 +284,13 @@ export async function renderQRCodes(container) {
     const usedNames = new Map();
 
     try {
-      for (let i = 0; i < generatedList.length; i++) {
-        const p = generatedList[i];
-        const { qr } = await generateQRForParticipant(p, { width: 400, height: 400 });
+      for (let i = 0; i < listToDownload.length; i++) {
+        const p = listToDownload[i];
+        const { qr } = await generateQRForParticipant(p, { width: 450, height: 450 });
         const blob = await qr.getRawData('png');
 
         const rawName = getDisplayName(p).replace(/[\\/:*?"<>|]+/g, '_').trim() || `Учасник_${p.id}`;
-        const typeLabel = getTypeLabel(p.type).replace(/[\\/:*?"<>|]+/g, '_');
+        const typeLabel = (p.roleName || getCategoryMeta(p.type).label).replace(/[\\/:*?"<>|]+/g, '_');
         const baseName = `${rawName}_${typeLabel}`;
 
         let finalName = `${baseName}.png`;
@@ -365,7 +305,7 @@ export async function renderQRCodes(container) {
         zip.file(finalName, blob);
 
         if (progressText) {
-          progressText.textContent = `Підготовка ZIP архіву... (${i + 1} / ${generatedList.length})`;
+          progressText.textContent = `Підготовка ZIP архіву... (${i + 1} / ${listToDownload.length})`;
         }
       }
 
@@ -373,9 +313,10 @@ export async function renderQRCodes(container) {
         progressText.textContent = 'Стиснення архіву...';
       }
 
+      const zipName = categoryKey === 'all' ? 'qr-codes-all.zip' : `qr-codes-${categoryKey}.zip`;
       const zipBlob = await zip.generateAsync({ type: 'blob' });
-      saveAs(zipBlob, 'qr-codes.zip');
-      showToast('Архів успішно завантажено', 'success');
+      saveAs(zipBlob, zipName);
+      showToast(`Архів "${zipName}" успішно завантажено`, 'success');
     } catch (err) {
       console.error('Error creating ZIP archive:', err);
       showToast('Помилка при створенні ZIP архіву', 'error');
@@ -384,16 +325,12 @@ export async function renderQRCodes(container) {
     }
   }
 
-  // Initial render
   await render();
-
   return null;
 }
 
 /**
  * Open enlarged QR code Lightbox Modal.
- * @param {object} participant
- * @param {Function} [onClose] - Optional callback when modal is closed.
  */
 export async function showQRZoomModal(participant, onClose) {
   if (document.querySelector('.modal-backdrop')) {
@@ -405,27 +342,26 @@ export async function showQRZoomModal(participant, onClose) {
   backdrop.className = 'modal-backdrop';
 
   const name = getDisplayName(participant);
-  const pType = participant.type || 'participant';
-  const typeLabel = getTypeLabel(pType);
-  const badgeClass = getTypeBadgeClass(pType);
-  const school = participant.school || participant.collectiveName || '';
-  const phone = participant.phone || '';
+  const meta = getCategoryMeta(participant.type);
+  const typeLabel = participant.roleName || meta.label;
+  const org = participant.organization || participant.school || participant.collectiveName || '';
+  const phone = participant.phone || participant.parentPhone || '';
 
   backdrop.innerHTML = `
-    <div class="modal" style="max-width: 460px; width: 100%; text-align: center; padding: var(--space-6);">
+    <div class="modal" style="max-width: 480px; width: 100%; text-align: center; padding: var(--space-6); border-top: 4px solid ${meta.color};">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-        <span class="badge ${badgeClass}">${typeLabel}</span>
+        <span class="badge ${meta.badgeClass}" style="font-size: var(--font-size-sm);">${meta.icon} ${typeLabel}</span>
         <button type="button" class="btn btn-ghost" id="modalCloseX" style="font-size: 1.2rem; padding: 4px 8px;">✕</button>
       </div>
 
-      <div style="font-size: var(--font-size-xl); font-weight: 700; margin-bottom: var(--space-2); color: var(--text-primary);">
+      <div style="font-size: 1.4rem; font-weight: 800; margin-bottom: var(--space-2); color: var(--text-primary);">
         ${escapeHtml(name)}
       </div>
 
-      ${school ? `<div style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--space-2);">Колектив / Школа: <strong>${escapeHtml(school)}</strong></div>` : ''}
-      ${phone ? `<div style="font-size: var(--font-size-xs); color: var(--text-tertiary); margin-bottom: var(--space-4);">Тел: ${escapeHtml(phone)}</div>` : ''}
+      ${org ? `<div style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--space-1);">🏫 <strong>${escapeHtml(org)}</strong></div>` : ''}
+      ${phone ? `<div style="font-size: var(--font-size-sm); color: var(--text-tertiary); margin-bottom: var(--space-4); font-variant-numeric: tabular-nums;">📞 ${escapeHtml(phone)}</div>` : ''}
 
-      <div id="zoomQrContainer" style="background: white; padding: var(--space-4); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-6) auto; width: 290px; height: 290px; box-shadow: var(--shadow-lg);">
+      <div id="zoomQrContainer" style="background: white; padding: var(--space-4); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-6) auto; width: 300px; height: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
         <div class="spinner"></div>
       </div>
 
@@ -445,13 +381,13 @@ export async function showQRZoomModal(participant, onClose) {
 
   const containerEl = backdrop.querySelector('#zoomQrContainer');
   try {
-    const { qr } = await generateQRForParticipant(participant, { width: 260, height: 260 });
+    const { qr } = await generateQRForParticipant(participant, { width: 270, height: 270 });
     containerEl.innerHTML = '';
     qr.append(containerEl);
 
     backdrop.querySelector('#modalDownloadBtn').addEventListener('click', () => {
-      const rawName = name.replace(/\s+/g, '_');
-      const fileName = `${rawName}_${getTypeLabel(pType).replace(/\s+/g, '_')}`;
+      const rawName = name.replace(/[\\/:*?"<>|]+/g, '_').trim();
+      const fileName = `${rawName}_${typeLabel.replace(/[\\/:*?"<>|]+/g, '_')}`;
       qr.download({ name: fileName, extension: 'png' });
       showToast(`Завантажено QR для: ${name}`, 'success');
     });

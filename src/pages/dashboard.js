@@ -1,79 +1,15 @@
 /**
  * Dashboard Page
- * Displays overall event statistics, registration progress, quick actions, and recent scans.
+ * Displays overall event statistics, category breakdown, Google Sheets live sync, and recent scans.
  */
 import { getStats, getParticipants, getScanLog, addParticipants } from '../data/store.js';
+import { fetchWithAuth } from '../data/auth.js';
+import { getCategoryMeta } from '../data/qr-generator.js';
 import { navigateTo } from '../router.js';
 import { showAddParticipantModal } from './participants.js';
 import { showQRZoomModal } from './qrcodes.js';
-import { showToast } from '../utils/ui.js';
+import { showToast, formatTime } from '../utils/ui.js';
 
-/**
- * Format timestamp to a human readable time string.
- * @param {string|number|Date} timestamp
- * @returns {string}
- */
-function formatScanTime(timestamp) {
-  if (!timestamp) return '—';
-  try {
-    const d = new Date(timestamp);
-    return d.toLocaleTimeString('uk-UA', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  } catch {
-    return '—';
-  }
-}
-
-/**
- * Get HTML badge for participant type.
- * @param {string} type
- * @returns {string}
- */
-function getTypeBadge(type) {
-  switch (type) {
-    case 'participant':
-      return '<span class="badge badge-participant">Учасник</span>';
-    case 'collective_member':
-      return '<span class="badge badge-collective">Колектив</span>';
-    case 'guest':
-      return '<span class="badge badge-guest">Гість</span>';
-    case 'designer':
-      return '<span class="badge badge-designer">Дизайнер</span>';
-    case 'sponsor':
-      return '<span class="badge badge-sponsor">Спонсор</span>';
-    case 'other':
-      return '<span class="badge badge-other">Інше</span>';
-    default:
-      return '<span class="badge badge-participant">Учасник</span>';
-  }
-}
-
-/**
- * Get HTML badge for scan status.
- * @param {string} status
- * @returns {string}
- */
-function getStatusBadge(status) {
-  switch (status) {
-    case 'success':
-      return '<span class="badge badge-success">✅ Успішно</span>';
-    case 'warning':
-      return '<span class="badge badge-guest">⚠️ Повторно</span>';
-    case 'error':
-      return '<span class="badge badge-error">❌ Заборонено</span>';
-    default:
-      return '<span class="badge">—</span>';
-  }
-}
-
-/**
- * Escape HTML to prevent XSS.
- * @param {string} str
- * @returns {string}
- */
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
@@ -84,125 +20,59 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-/**
- * Render the Dashboard page into the given container element.
- * @param {HTMLElement} container
- * @returns {Promise<null>}
- */
 export async function renderDashboard(container) {
-  const stats = await getStats();
+  const participants = await getParticipants();
   const scanLog = await getScanLog();
 
-  const total = stats.total || 0;
-  const checkedIn = stats.checkedIn || 0;
-  const waiting = Math.max(0, total - checkedIn);
-  const qrGenerated = stats.qrGenerated || 0;
-  const participantsCount = stats.participants || 0;
-  const collectiveMembersCount = stats.collectiveMembers || 0;
-  const guestsCount = stats.guests || 0;
+  const total = participants.length;
+  let checkedIn = 0;
+  let qrGenerated = 0;
 
+  // Breakdown by category
+  const breakdown = {
+    participant: 0,
+    guest: 0,
+    designer: 0,
+    photographer: 0,
+    partner: 0,
+    collective_member: 0
+  };
+
+  for (const p of participants) {
+    if (p.checkedIn) checkedIn++;
+    if (p.qrGenerated) qrGenerated++;
+    if (breakdown[p.type] !== undefined) {
+      breakdown[p.type]++;
+    } else {
+      breakdown.participant++;
+    }
+  }
+
+  const waiting = Math.max(0, total - checkedIn);
   const percentage = total > 0 ? Math.round((checkedIn / total) * 100) : 0;
 
-  // If total is 0, show friendly empty state encouraging import
-  if (total === 0) {
-    container.innerHTML = `
-      <div class="page-header">
-        <h1 class="page-title"><span class="page-title-gradient">Дашборд</span></h1>
-        <p class="page-subtitle">Вітаємо у системі QR Event Manager</p>
-      </div>
-
-      <div class="card empty-state">
-        <span class="empty-state-icon">⚡</span>
-        <h2 class="empty-state-title">Подія порожня</h2>
-        <p class="empty-state-text">Імпортуйте Excel файл з учасниками або додайте першого гостя вручну.</p>
-        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center;">
-          <button class="btn btn-primary btn-lg" id="emptyRegisterBtn">
-            ✨ Зареєструвати гостя
-          </button>
-          <a href="#import" class="btn btn-secondary btn-lg" id="emptyImportBtn">
-            <span>📥</span>
-            <span>Імпортувати з Excel</span>
-          </a>
-        </div>
-      </div>
-    `;
-
-    container.querySelector('#emptyRegisterBtn').addEventListener('click', async () => {
-      const result = await showAddParticipantModal('guest');
-      if (result && result.participant) {
-        await addParticipants(result.participant);
-        showToast('Зареєстровано успішно', 'success');
-        if (result.generateQR) {
-          await showQRZoomModal(result.participant);
-        }
-        await renderDashboard(container);
-      }
-    });
-
-    const emptyImportBtn = container.querySelector('#emptyImportBtn');
-    if (emptyImportBtn) {
-      emptyImportBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        navigateTo('import');
-      });
-    }
-
-    return null;
-  }
-
-  // Last 5 scans
+  // Recent scans
   const recentScans = Array.isArray(scanLog) ? scanLog.slice(0, 5) : [];
 
-  let recentScansHtml = '';
-  if (recentScans.length === 0) {
-    recentScansHtml = `
-      <div style="text-align: center; padding: var(--space-8); color: var(--text-tertiary);">
-        <span style="font-size: 2rem; display: block; margin-bottom: var(--space-2); opacity: 0.5;">📷</span>
-        <p>Сканувань ще не було. Відкрийте сканер для початку реєстрації входу.</p>
-      </div>
-    `;
-  } else {
-    const tableRows = recentScans
-      .map((entry) => {
-        const timeStr = formatScanTime(entry.timestamp);
-        const nameStr = escapeHtml(entry.name || entry.participantId || 'Невідомий');
-        const typeBadge = getTypeBadge(entry.type);
-        const statusBadge = getStatusBadge(entry.status);
-
-        return `
-          <tr>
-            <td style="color: var(--text-secondary); font-variant-numeric: tabular-nums;">${timeStr}</td>
-            <td style="font-weight: 600;">${nameStr}</td>
-            <td>${typeBadge}</td>
-            <td>${statusBadge}</td>
-          </tr>
-        `;
-      })
-      .join('');
-
-    recentScansHtml = `
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Час</th>
-              <th>Учасник</th>
-              <th>Категорія</th>
-              <th>Статус</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tableRows}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
-
   container.innerHTML = `
-    <div class="page-header">
-      <h1 class="page-title"><span class="page-title-gradient">Дашборд</span></h1>
-      <p class="page-subtitle">Загальна статистика події</p>
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4);">
+      <div>
+        <h1 class="page-title"><span class="page-title-gradient">Дашборд</span></h1>
+        <p class="page-subtitle">Загальна статистика події Top Fashion Fest</p>
+      </div>
+
+      <!-- Google Sheets Live Sync Widget -->
+      <div style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--space-2) var(--space-4); display: flex; align-items: center; gap: var(--space-3); backdrop-filter: blur(10px);">
+        <div style="display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-xs); font-weight: 600;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px #10B981;"></span>
+          <span style="color: var(--text-secondary);">Google Таблиця:</span>
+          <span style="color: var(--text-primary);">Авто-синхронізація</span>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnSyncGoogleSheets" title="Оновити дані з Google Таблиці зараз" style="font-size: var(--font-size-xs); padding: 4px 10px;">
+          <span>🔄</span>
+          <span>Оновити зараз</span>
+        </button>
+      </div>
     </div>
 
     <!-- 1st Stats Grid: 4 main cards -->
@@ -210,61 +80,70 @@ export async function renderDashboard(container) {
       <div class="stat-card">
         <span class="stat-icon">👥</span>
         <div class="stat-value stat-value-gradient">${total}</div>
-        <div class="stat-label">Всього зареєстровано</div>
+        <div class="stat-label">Всього в системі</div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">🏷️</span>
         <div class="stat-value">${qrGenerated}</div>
-        <div class="stat-label">QR кодів створено</div>
+        <div class="stat-label">QR кодів згенеровано</div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">✅</span>
-        <div class="stat-value stat-value-gradient">${checkedIn}</div>
-        <div class="stat-label">Відскановано</div>
+        <div class="stat-value stat-value-gradient" style="color: #10B981;">${checkedIn}</div>
+        <div class="stat-label">Пройшли вхід</div>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⏳</span>
-        <div class="stat-value">${waiting}</div>
-        <div class="stat-label">Очікують</div>
+        <div class="stat-value" style="color: #F59E0B;">${waiting}</div>
+        <div class="stat-label">Очікують прибуття</div>
       </div>
     </div>
 
-    <!-- 2nd Stats Grid: 3 category cards -->
-    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: var(--space-8);">
-      <div class="stat-card">
-        <span class="stat-icon">🎭</span>
-        <div class="stat-value">
-          <span class="badge badge-participant" style="font-size: var(--font-size-xl); padding: var(--space-1) var(--space-3); border-radius: var(--radius-md);">${participantsCount}</span>
-        </div>
-        <div class="stat-label">Учасники</div>
+    <!-- 2nd Stats Grid: Category cards with colors -->
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin-bottom: var(--space-8);">
+      <div class="stat-card" style="border-top: 3px solid #7C3AED;">
+        <span class="stat-icon">🟣</span>
+        <div class="stat-value">${breakdown.participant}</div>
+        <div class="stat-label">Моделі / Учасники</div>
       </div>
-      <div class="stat-card">
-        <span class="stat-icon">👯</span>
-        <div class="stat-value">
-          <span class="badge badge-collective" style="font-size: var(--font-size-xl); padding: var(--space-1) var(--space-3); border-radius: var(--radius-md);">${collectiveMembersCount}</span>
-        </div>
-        <div class="stat-label">Колективи</div>
-      </div>
-      <div class="stat-card">
+      <div class="stat-card" style="border-top: 3px solid #059669;">
         <span class="stat-icon">🌟</span>
-        <div class="stat-value">
-          <span class="badge badge-guest" style="font-size: var(--font-size-xl); padding: var(--space-1) var(--space-3); border-radius: var(--radius-md);">${guestsCount}</span>
-        </div>
-        <div class="stat-label">Гості</div>
+        <div class="stat-value">${breakdown.guest}</div>
+        <div class="stat-label">Запрошені гості</div>
+      </div>
+      <div class="stat-card" style="border-top: 3px solid #D97706;">
+        <span class="stat-icon">👗</span>
+        <div class="stat-value">${breakdown.designer}</div>
+        <div class="stat-label">Дизайнери</div>
+      </div>
+      <div class="stat-card" style="border-top: 3px solid #0284C7;">
+        <span class="stat-icon">📸</span>
+        <div class="stat-value">${breakdown.photographer}</div>
+        <div class="stat-label">Фото / Відео</div>
+      </div>
+      <div class="stat-card" style="border-top: 3px solid #EA580C;">
+        <span class="stat-icon">🤝</span>
+        <div class="stat-value">${breakdown.partner}</div>
+        <div class="stat-label">Партнери</div>
+      </div>
+      <div class="stat-card" style="border-top: 3px solid #DB2777;">
+        <span class="stat-icon">🌸</span>
+        <div class="stat-value">${breakdown.collective_member}</div>
+        <div class="stat-label">Колективи</div>
       </div>
     </div>
 
     <!-- Registration Progress Card -->
     <div class="card" style="margin-bottom: var(--space-8);">
       <div class="card-header">
-        <h3 class="card-title">Прогрес реєстрації</h3>
+        <h3 class="card-title">Прогрес реєстрації на вході</h3>
         <span style="font-size: var(--font-size-lg); font-weight: 700; color: var(--accent-primary-light);">${percentage}%</span>
       </div>
       <div class="progress-bar" style="margin-bottom: var(--space-4);">
         <div class="progress-fill" style="width: ${percentage}%;"></div>
       </div>
-      <div style="display: flex; justify-content: space-between; align-items: center; font-size: var(--font-size-sm); color: var(--text-secondary);">
-        <span><strong>${checkedIn}</strong> / <strong>${total}</strong> (пройшли реєстрацію)</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: var(--font-size-sm); color: var(--text-secondary); flex-wrap: wrap; gap: var(--space-2);">
+        <span><strong>${checkedIn}</strong> з <strong>${total}</strong> пройшли контроль</span>
         <span>Очікують прибуття: <strong>${waiting}</strong></span>
       </div>
     </div>
@@ -278,11 +157,11 @@ export async function renderDashboard(container) {
         <button class="btn btn-primary btn-lg" id="dashboardScanBtn">
           📷 Сканувати QR
         </button>
-        <button class="btn btn-secondary btn-lg" id="dashboardRegisterBtn" style="border-color: var(--accent-primary-light); color: var(--accent-primary-light);">
-          ✨ Зареєструвати гостя / VIP
+        <button class="btn btn-secondary btn-lg" id="dashboardQrCodesBtn">
+          🏷️ Переглянути QR-коди
         </button>
-        <button class="btn btn-secondary btn-lg" id="dashboardImportBtn">
-          📥 Імпортувати з Excel
+        <button class="btn btn-secondary btn-lg" id="dashboardRegisterBtn" style="border-color: var(--accent-primary-light); color: var(--accent-primary-light);">
+          ✨ Додати гостя / VIP вручну
         </button>
       </div>
     </div>
@@ -293,16 +172,95 @@ export async function renderDashboard(container) {
         <h3 class="card-title">Останні сканування</h3>
         ${recentScans.length > 0 ? `<button class="btn btn-ghost btn-sm" id="dashboardViewAllLogsBtn">Переглянути всі →</button>` : ''}
       </div>
-      ${recentScansHtml}
+      ${
+        recentScans.length === 0
+          ? `
+          <div style="text-align: center; padding: var(--space-8); color: var(--text-tertiary);">
+            <span style="font-size: 2rem; display: block; margin-bottom: var(--space-2); opacity: 0.5;">📷</span>
+            <p>Сканувань ще не було. Відкрийте сканер для початку реєстрації входу.</p>
+          </div>
+        `
+          : `
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Час</th>
+                  <th>Учасник</th>
+                  <th>Категорія</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${recentScans
+                  .map((entry) => {
+                    const timeStr = formatTime(entry.timestamp);
+                    const nameStr = escapeHtml(entry.name || entry.participantId || 'Невідомий');
+                    const meta = getCategoryMeta(entry.type);
+
+                    let statusBadge = '';
+                    if (entry.status === 'success') {
+                      statusBadge = '<span class="badge badge-success">✅ Успішно</span>';
+                    } else if (entry.status === 'warning') {
+                      statusBadge = '<span class="badge badge-guest">⚠️ Повторно</span>';
+                    } else {
+                      statusBadge = '<span class="badge badge-error">❌ Заборонено</span>';
+                    }
+
+                    return `
+                      <tr>
+                        <td style="color: var(--text-secondary); font-variant-numeric: tabular-nums;">${timeStr}</td>
+                        <td style="font-weight: 600;">${nameStr}</td>
+                        <td><span class="badge ${meta.badgeClass}">${meta.icon} ${meta.label}</span></td>
+                        <td>${statusBadge}</td>
+                      </tr>
+                    `;
+                  })
+                  .join('')}
+              </tbody>
+            </table>
+          </div>
+        `
+      }
     </div>
   `;
 
   // Attach event listeners
+  const btnSync = container.querySelector('#btnSyncGoogleSheets');
+  if (btnSync) {
+    btnSync.addEventListener('click', async () => {
+      btnSync.disabled = true;
+      btnSync.innerHTML = '<span>⏳</span><span>Синхронізація...</span>';
+      try {
+        const res = await fetchWithAuth('/api/sync/google-sheets', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ forceReset: false })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Синхронізація успішна! Всього: ${data.totalCount} осіб`, 'success');
+          await renderDashboard(container);
+        } else {
+          showToast(`Помилка синхронізації: ${data.error || 'Невідома помилка'}`, 'error');
+        }
+      } catch (err) {
+        showToast(`Помилка підключення: ${err.message}`, 'error');
+      } finally {
+        btnSync.disabled = false;
+        btnSync.innerHTML = '<span>🔄</span><span>Оновити зараз</span>';
+      }
+    });
+  }
+
   const scanBtn = container.querySelector('#dashboardScanBtn');
   if (scanBtn) {
-    scanBtn.addEventListener('click', () => {
-      navigateTo('scanner');
-    });
+    scanBtn.addEventListener('click', () => navigateTo('scanner'));
+  }
+
+  const qrCodesBtn = container.querySelector('#dashboardQrCodesBtn');
+  if (qrCodesBtn) {
+    qrCodesBtn.addEventListener('click', () => navigateTo('qrcodes'));
   }
 
   const registerBtn = container.querySelector('#dashboardRegisterBtn');
@@ -320,18 +278,9 @@ export async function renderDashboard(container) {
     });
   }
 
-  const importBtn = container.querySelector('#dashboardImportBtn');
-  if (importBtn) {
-    importBtn.addEventListener('click', () => {
-      navigateTo('import');
-    });
-  }
-
   const viewAllLogsBtn = container.querySelector('#dashboardViewAllLogsBtn');
   if (viewAllLogsBtn) {
-    viewAllLogsBtn.addEventListener('click', () => {
-      navigateTo('log');
-    });
+    viewAllLogsBtn.addEventListener('click', () => navigateTo('log'));
   }
 
   return null;

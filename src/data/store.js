@@ -4,6 +4,15 @@ import { fetchWithAuth, isAuthenticated } from './auth.js';
 const PARTICIPANTS_KEY = 'participants';
 const SCAN_LOG_KEY = 'scanLog';
 
+function normalizeName(name) {
+  if (!name) return '';
+  return String(name)
+    .toLowerCase()
+    .replace(/[«»"'`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 // Helper to push state to server /api/sync
 async function pushToServer(participants, scanLog, flags = {}) {
   if (!isAuthenticated()) return;
@@ -19,12 +28,11 @@ async function pushToServer(participants, scanLog, flags = {}) {
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    // Network sync is best-effort when offline
     console.debug('Background sync push skipped:', e.message);
   }
 }
 
-// Helper to pull state from server /api/sync and update IndexedDB
+// Helper to pull state from server /api/sync and synchronize IndexedDB with authoritative server state
 export async function syncWithServer() {
   if (!isAuthenticated()) return;
 
@@ -33,57 +41,66 @@ export async function syncWithServer() {
     if (!res.ok) return;
 
     const serverData = await res.json();
-    const localParticipants = await get(PARTICIPANTS_KEY) || [];
-    const localScanLog = await get(SCAN_LOG_KEY) || [];
+    const localParticipants = (await get(PARTICIPANTS_KEY)) || [];
+    const localScanLog = (await get(SCAN_LOG_KEY)) || [];
 
-    let updated = false;
-
-    // Merge server participants into local IndexedDB
+    // The Server is the authoritative source for list of participants
     if (Array.isArray(serverData.participants) && serverData.participants.length > 0) {
-      const pMap = new Map();
-      for (const p of localParticipants) pMap.set(String(p.id), p);
-
-      for (const p of serverData.participants) {
-        const existing = pMap.get(String(p.id));
-        if (!existing) {
-          pMap.set(String(p.id), p);
-          updated = true;
-        } else if (p.checkedIn && !existing.checkedIn) {
-          pMap.set(String(p.id), { ...existing, ...p });
-          updated = true;
+      const localCheckInMap = new Map();
+      for (const p of localParticipants) {
+        if (p.checkedIn) {
+          localCheckInMap.set(String(p.id), {
+            checkedIn: true,
+            checkedInAt: p.checkedInAt
+          });
+          const norm = normalizeName(p.fullName);
+          if (norm) {
+            localCheckInMap.set(norm, {
+              checkedIn: true,
+              checkedInAt: p.checkedInAt
+            });
+          }
         }
       }
 
-      if (updated || localParticipants.length !== pMap.size) {
-        const mergedList = Array.from(pMap.values());
-        await set(PARTICIPANTS_KEY, mergedList);
+      // Synchronize with server list, carrying over check-in marks
+      const syncedList = serverData.participants.map((serverP) => {
+        const checkInByDb = localCheckInMap.get(String(serverP.id)) || localCheckInMap.get(normalizeName(serverP.fullName));
+        if (checkInByDb && !serverP.checkedIn) {
+          return {
+            ...serverP,
+            checkedIn: true,
+            checkedInAt: checkInByDb.checkedInAt || new Date().toISOString()
+          };
+        }
+        return serverP;
+      });
+
+      // Deduplicate by name
+      const uniqueMap = new Map();
+      for (const p of syncedList) {
+        const key = p.type === 'collective_member' && p.memberIndex
+          ? `collective:${p.collectiveName}:${p.memberIndex}`
+          : normalizeName(p.fullName);
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, p);
+        }
       }
+
+      const finalList = Array.from(uniqueMap.values());
+      await set(PARTICIPANTS_KEY, finalList);
     }
 
     // Merge scan logs
-    if (Array.isArray(serverData.scanLog) && serverData.scanLog.length > 0) {
+    if (Array.isArray(serverData.scanLog)) {
       const logMap = new Map();
       for (const l of localScanLog) logMap.set(String(l.id), l);
-      let logUpdated = false;
+      for (const l of serverData.scanLog) logMap.set(String(l.id), l);
 
-      for (const l of serverData.scanLog) {
-        if (!logMap.has(String(l.id))) {
-          logMap.set(String(l.id), l);
-          logUpdated = true;
-        }
-      }
-
-      if (logUpdated) {
-        const mergedLog = Array.from(logMap.values()).sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        );
-        await set(SCAN_LOG_KEY, mergedLog);
-      }
-    }
-
-    // Also push any local participants/scanLogs back to server if server was empty
-    if (localParticipants.length > 0 && (!serverData.participants || serverData.participants.length === 0)) {
-      await pushToServer(localParticipants, localScanLog);
+      const mergedLog = Array.from(logMap.values()).sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+      await set(SCAN_LOG_KEY, mergedLog);
     }
   } catch (e) {
     console.debug('Background sync pull skipped:', e.message);
@@ -102,7 +119,20 @@ if (typeof window !== 'undefined') {
 export async function getParticipants() {
   await syncWithServer();
   const participants = await get(PARTICIPANTS_KEY);
-  return Array.isArray(participants) ? participants : [];
+  if (!Array.isArray(participants)) return [];
+
+  // Deduplication guard
+  const uniqueMap = new Map();
+  for (const p of participants) {
+    const key = p.type === 'collective_member' && p.memberIndex
+      ? `collective:${p.collectiveName}:${p.memberIndex}`
+      : normalizeName(p.fullName);
+    if (!uniqueMap.has(key)) {
+      uniqueMap.set(key, p);
+    }
+  }
+
+  return Array.from(uniqueMap.values());
 }
 
 export async function setParticipants(participants) {
@@ -113,10 +143,10 @@ export async function setParticipants(participants) {
 }
 
 export async function addParticipants(newParticipants) {
-  const existing = await get(PARTICIPANTS_KEY) || [];
-  const existingIds = new Set(existing.map((p) => String(p.id)));
+  const existing = (await get(PARTICIPANTS_KEY)) || [];
+  const existingNames = new Set(existing.map((p) => normalizeName(p.fullName)));
   const incoming = Array.isArray(newParticipants) ? newParticipants : [newParticipants];
-  const toAdd = incoming.filter((p) => p && p.id !== undefined && !existingIds.has(String(p.id)));
+  const toAdd = incoming.filter((p) => p && !existingNames.has(normalizeName(p.fullName)));
   const merged = [...existing, ...toAdd];
   await set(PARTICIPANTS_KEY, merged);
   pushToServer(merged, null);

@@ -1,9 +1,8 @@
 {
   "participants": [
     {
-      "id": "34ef2c5d-69be-4d78-b0ab-3d723318c6e4",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Фаталієва Анна Дмитрівна",
       "firstName": "Фаталієва Анна Дмитрівна",
       "lastName": "",
@@ -22,12 +21,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "6fa3c853-c8c3-4952-ba25-a06942200a45"
     },
     {
-      "id": "d667cb00-2993-4cd5-afe8-5ebbbfa1b0f5",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Красовська Поліна Денисівна",
       "firstName": "Красовська Поліна Денисівна",
       "lastName": "",
@@ -46,12 +45,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "ebf0c364-353f-4812-a311-c401ba7b3e53"
     },
     {
-      "id": "b037c941-bbfc-4551-bc63-6ec98654a1db",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Марценюк Анастасія Валеріївна",
       "firstName": "Марценюк Анастасія Валеріївна",
       "lastName": "",
@@ -70,12 +69,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7b8ad8f7-06e8-4c0c-9806-8003b0bfda94"
     },
     {
-      "id": "07a0013b-ca4c-4154-9bad-326f1392100c",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Бойчук Анна Леонідівна",
       "firstName": "Бойчук Анна Леонідівна",
       "lastName": "",
@@ -94,12 +93,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7910196c-b47f-43de-b760-3ca767d10eff"
     },
     {
-      "id": "67397f38-e92f-49df-b76f-f9b00ec029c8",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Крупник Олександра Андріївна",
       "firstName": "Крупник Олександра Андріївна",
       "lastName": "",
@@ -118,12 +117,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "6f5b00e1-5c45-4ab6-9b7e-ee7128ec717a"
     },
     {
-      "id": "822d567e-16c5-4826-9bb8-87d6a6445df1",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Малишко Ангеліна Євгенівна",
       "firstName": "Малишко Ангеліна Євгенівна",
       "lastName": "",
@@ -142,10 +141,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "ad9d465f-33ee-4973-9e05-191308c45d53"
     },
     {
-      "id": "caee77eb-7372-49ff-8e63-1b6371d06b89",
       "type": "partner",
       "roleName": "Партнер / Спонсор",
       "fullName": "Фесенко Ярослава Юріївна",
@@ -161,10 +160,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "4a3c27ff-c22a-49f6-a29a-01794ae6bf6d"
     },
     {
-      "id": "e127ea7f-bb2f-4128-aa5e-03b7f0f5eaa7",
       "type": "partner",
       "roleName": "Партнер / Спонсор",
       "fullName": "Фесюк Валерія Максимівна",
@@ -180,29 +179,30 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "ef337dbd-8e6d-466f-9197-ffc0217fdcab"
     },
     {
-      "id": "e4ceaa3e-6260-46dc-a69b-92f78deb8467",
-      "type": "partner",
-      "roleName": "Партнер / Спонсор",
+      "type": "photographer",
+      "roleName": "Фотограф",
       "fullName": "Міліція Оксана Василівна",
       "firstName": "Міліція Оксана Василівна",
       "lastName": "",
-      "organization": "Фотограф Оксана Міліція",
+      "organization": "@Oksanamil.ph",
       "phone": "+380684816579",
-      "category": "Фотографія, репортажна та портретна фотографія, зйомка подій.",
-      "instagram": "@oksanamil.ph",
+      "category": "Фотограф",
+      "instagram": "Oksanamil.ph",
       "telegram": "@oksanamilitsiia",
-      "sourceSheet": "Партнери Оплата",
+      "sourceSheet": "Фотографивідеографи",
       "qrGenerated": true,
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "2647b9f7-aa39-4535-ae89-74c6c71bd84a",
+      "portfolio": "https://oksanamil.pixover.gallery/7129-moiroboty"
     },
     {
-      "id": "d79f41fd-057f-46b4-b902-c45fd60ec7be",
       "type": "partner",
       "roleName": "Партнер / Спонсор",
       "fullName": "Стадник Дарʼя Володимирівна",
@@ -218,241 +218,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0c797fd8-2d18-4f21-bddd-1fd0a878548b"
     },
     {
-      "id": "10a1c32a-7ad1-4c4d-b359-8f387da64b3e",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Тищук Олексій Олександрович",
-      "firstName": "Тищук Олексій Олександрович",
-      "lastName": "",
-      "organization": "Дочка відвідує Top children, Аріна Тищук",
-      "phone": "+380951275793",
-      "category": "Гість",
-      "instagram": "tyshchuk_alexey",
-      "telegram": "0951275793",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "5d5521cd-8926-41d5-9a4b-4f2dc06c4af8",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Харкавий Дмитро",
-      "firstName": "Харкавий Дмитро",
-      "lastName": "",
-      "organization": "Донечка приймає участь",
-      "phone": "+380687707067",
-      "category": "Гість",
-      "instagram": "https://www.instagram.com/dashasmile1212?igsh=bHpvc21qbndmbHo0",
-      "telegram": "0 (68) 770 70 67",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "6984ef1b-8248-4532-8381-d7484db9ca56",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Самсонова Вероніка",
-      "firstName": "Самсонова Вероніка",
-      "lastName": "",
-      "organization": "Реклама instagram",
-      "phone": "+380981242035",
-      "category": "Гість",
-      "instagram": "@vervillv",
-      "telegram": "@vervill37",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "2d6189b4-8311-483c-95fd-f43fb863e3ea",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Матвійчук Кіра",
-      "firstName": "Матвійчук Кіра",
-      "lastName": "",
-      "organization": "Реклама",
-      "phone": "+380677020685",
-      "category": "Гість",
-      "instagram": "@matvvk",
-      "telegram": "@matvvk",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "e84520cd-b5a8-401a-ad3a-556b6413cece",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Svitlana",
-      "firstName": "Svitlana",
-      "lastName": "",
-      "organization": "Instagram",
-      "phone": "+380509587507",
-      "category": "Гість",
-      "instagram": "Svitlana Rud",
-      "telegram": "@Rud_Svitlana",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "8d8cf97c-caf0-4ab2-92b5-e1da057e4c77",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": ".",
-      "firstName": ".",
-      "lastName": "",
-      "organization": ".",
-      "phone": "",
-      "category": "Гість",
-      "instagram": ".",
-      "telegram": ".",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "208ad50f-afae-4313-8bea-49bcead35021",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Проценко Інна",
-      "firstName": "Проценко Інна",
-      "lastName": "",
-      "organization": "Донька бере участь в колекції Natalii Dorosh",
-      "phone": "+380676644425",
-      "category": "Гість",
-      "instagram": "@protcenko09",
-      "telegram": "+380676644425 @Інна Проценко",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "8df5a6e2-4743-428a-9c17-e222e92b9be7",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Філінковська Анна",
-      "firstName": "Філінковська Анна",
-      "lastName": "",
-      "organization": "реклама інст",
-      "phone": "+380933504116",
-      "category": "Гість",
-      "instagram": "__anna.belll__",
-      "telegram": "@wyrtinw",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "2c4f4608-7451-4f43-85e4-c15be747b428",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Синельник Аня",
-      "firstName": "Синельник Аня",
-      "lastName": "",
-      "organization": "Реклама інстаграм",
-      "phone": "+380985935953",
-      "category": "Гість",
-      "instagram": "@_anichka.s_",
-      "telegram": "+380985935953",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "b61fe95a-83ff-48a5-99be-a9f1c680046c",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Бабенко Любов",
-      "firstName": "Бабенко Любов",
-      "lastName": "",
-      "organization": "В інстаграм",
-      "phone": "+380635571106",
-      "category": "Гість",
-      "instagram": "@lubov.babenko_   @atelier.lubov",
-      "telegram": "0635571106",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "5357206b-fbec-45ac-a64f-792dea21471e",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Дьогтєв Андрій",
-      "firstName": "Дьогтєв Андрій",
-      "lastName": "",
-      "organization": "Реклама",
-      "phone": "+380633207426",
-      "category": "Гість",
-      "instagram": "andrew_di",
-      "telegram": "",
-      "sourceSheet": "Ответы на форму (9)",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "8b91e20f-eb36-47dd-bd92-5ec22dfd2d64",
-      "type": "designer",
-      "roleName": "Дизайнер",
-      "fullName": "Ванєєва Лариса Олексіївна",
-      "firstName": "Ванєєва Лариса Олексіївна",
-      "lastName": "",
-      "organization": "ARTelь moda",
-      "phone": "+380506689366",
-      "category": "Дизайнер року",
-      "instagram": "@artelmoda_sumy",
-      "telegram": "@lara_vaneeva",
-      "notes": "Дизайн-студія \"ARTelь moda\" Сумського ОЦПО та РТМ. Школа моди та дизайну для жітей та молоді. Народний колектив України.",
-      "sourceSheet": "Заявки на участь дизайнери",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "99bcc97d-02a2-461f-a0db-0da487b1654b",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Лех Ангеліна Євгенівна",
       "firstName": "Лех Ангеліна Євгенівна",
       "lastName": "",
@@ -471,12 +242,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "82291d10-19c8-48ce-bad2-254e7bd7c6c5"
     },
     {
-      "id": "265a9c47-92f8-41d7-82af-574e745e434c",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Шелудько Віра Сергіївна",
       "firstName": "Шелудько Віра Сергіївна",
       "lastName": "",
@@ -495,12 +266,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a7dd10b6-72f5-4c53-a9b9-ac349b899a50"
     },
     {
-      "id": "a880e548-d227-4b0b-8ee7-e286ab01bdd6",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Нечитайло Олександра Ігорівна",
       "firstName": "Нечитайло Олександра Ігорівна",
       "lastName": "",
@@ -519,12 +290,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "2a3aa48d-0672-45af-885e-603a291b6d6c"
     },
     {
-      "id": "c254d6fe-ad28-4b55-9f33-ab0b20bdd1bd",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Віталіна Вишіван",
       "firstName": "Віталіна Вишіван",
       "lastName": "",
@@ -543,12 +314,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0e57bd59-0d3a-4e50-8c9e-3e937e31de68"
     },
     {
-      "id": "61c2b889-cc2b-458c-872b-06652d59241d",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Бортнічук Соломія Сергіївна",
       "firstName": "Бортнічук Соломія Сергіївна",
       "lastName": "",
@@ -567,12 +338,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "f39d3b41-1873-47c1-a6fc-b178548b7a5e"
     },
     {
-      "id": "11c3825c-5cc6-4a62-9257-e3343e6ee812",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Швець Ірина Андріївна",
       "firstName": "Швець Ірина Андріївна",
       "lastName": "",
@@ -591,12 +362,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "96116c5c-24c1-44e0-b32d-1e2132a80a47"
     },
     {
-      "id": "c5d729cd-c26f-4e54-83a2-822ae1e11388",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Стецюк Кіра Євгенівна",
       "firstName": "Стецюк Кіра Євгенівна",
       "lastName": "",
@@ -615,12 +386,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "59b52196-78aa-4d5c-bb3d-3499f92b2aa2"
     },
     {
-      "id": "a67e55a1-921d-4476-bf29-245fc089d360",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Бардакова Злата",
       "firstName": "Бардакова Злата",
       "lastName": "",
@@ -639,12 +410,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a2bb0f84-9abf-4ee5-8a4e-939f86f50755"
     },
     {
-      "id": "4d43d07a-f33b-4d84-8ac3-e9cb2c7da6cf",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Середа Анна Іванівна",
       "firstName": "Середа Анна Іванівна",
       "lastName": "",
@@ -663,12 +434,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e89d7af9-21f7-4b8c-bc02-ed6a7b03681e"
     },
     {
-      "id": "2aaaf5a7-8100-4ef0-b195-3e06cdd94767",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Фурманова Ева Олегівна",
       "firstName": "Фурманова Ева Олегівна",
       "lastName": "",
@@ -687,12 +458,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "890f8733-730b-43ad-bd90-f9cba365d771"
     },
     {
-      "id": "f6e08d80-961c-4bcc-b293-8997d04c3176",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Арещенко Єва Вікторівна",
       "firstName": "Арещенко Єва Вікторівна",
       "lastName": "",
@@ -711,12 +482,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "29e2bff8-36f4-468b-bacb-3e2913ef4bab"
     },
     {
-      "id": "a8d0f6ff-0416-4c40-b62a-914c079bdb98",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Харкава Дарья Дмитрівна",
       "firstName": "Харкава Дарья Дмитрівна",
       "lastName": "",
@@ -735,12 +506,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "728e4cc3-a85a-4e4d-96dc-d93b8ce9bf73"
     },
     {
-      "id": "d26150b6-404f-4f84-8d19-d5d6a7b50fdf",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Тищенко Іван Андрійович",
       "firstName": "Тищенко Іван Андрійович",
       "lastName": "",
@@ -759,12 +530,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "2d94e337-802d-4c72-b518-1d4189ff09cf"
     },
     {
-      "id": "d2ec5907-7659-4b6d-8c3b-6e1a4ed01c4f",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Ємцева Дар'я Євгенівна",
       "firstName": "Ємцева Дар'я Євгенівна",
       "lastName": "",
@@ -783,12 +554,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5b7d1e44-f078-4681-91b1-6f26956f77b6"
     },
     {
-      "id": "7f5867ee-ea36-4e29-844f-548dd5203ade",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Голубева Аліна Миколаївна",
       "firstName": "Голубева Аліна Миколаївна",
       "lastName": "",
@@ -807,12 +578,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a57c6a4c-842c-4a95-a8d1-e2743c3ba0dd"
     },
     {
-      "id": "56e0506d-5839-41e9-9d72-6f6ece36e40b",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Хуторна Софія Вікторівна",
       "firstName": "Хуторна Софія Вікторівна",
       "lastName": "",
@@ -831,12 +602,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "3d167ef6-e6c3-4b21-a563-2666d8855ae7"
     },
     {
-      "id": "c3ecab25-b792-4af7-a354-1c5233e3e0be",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Терлецька Софія Тарасівна",
       "firstName": "Терлецька Софія Тарасівна",
       "lastName": "",
@@ -855,12 +626,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "ee2b522c-533b-48b7-be10-8bb7d3730f23"
     },
     {
-      "id": "fa4bb6b6-934b-499c-a722-e0c38ee3f0a4",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Тищук Аріна Олексіївна",
       "firstName": "Тищук Аріна Олексіївна",
       "lastName": "",
@@ -879,12 +650,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5e20acc5-fdda-4b82-8143-a1fc6d44d647"
     },
     {
-      "id": "ba38530e-9242-4e6d-a10e-3ce34e6db7e1",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Колеснікова Улянв",
       "firstName": "Колеснікова Улянв",
       "lastName": "",
@@ -903,12 +674,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "37be1465-959d-4fb8-a7a6-16c31895d79d"
     },
     {
-      "id": "e6efec3f-8e03-4c7d-9335-395906fe9838",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Мінько Іван Дмитрович",
       "firstName": "Мінько Іван Дмитрович",
       "lastName": "",
@@ -927,12 +698,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "4cf2453d-d915-48e1-95a5-4f66e28eb0e4"
     },
     {
-      "id": "4ea0ecd8-bfcc-460f-b33c-41c69f646203",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Короленко Дар'я Андріївна",
       "firstName": "Короленко Дар'я Андріївна",
       "lastName": "",
@@ -951,12 +722,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "64ffa4b0-8320-4a86-860f-879889b769df"
     },
     {
-      "id": "0ad9c6c8-8adc-4ac3-b7bb-006082859ebf",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Шелест Юлія Вікторівна",
       "firstName": "Шелест Юлія Вікторівна",
       "lastName": "",
@@ -975,12 +746,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "1f3f59a9-4001-48cb-88d5-01e58e657ea9"
     },
     {
-      "id": "f67650b7-1daf-4a6c-9124-72e2ade13e21",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Комісарук Владислава Олександрівна",
       "firstName": "Комісарук Владислава Олександрівна",
       "lastName": "",
@@ -999,12 +770,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "6053359b-5598-4e00-8492-e64e589587a1"
     },
     {
-      "id": "be742d7e-3d1c-42a3-9d38-eb28abe3ea62",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Мнишенко Марія",
       "firstName": "Мнишенко Марія",
       "lastName": "",
@@ -1023,12 +794,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7922a848-c97f-4883-827f-a593b1c3c5bc"
     },
     {
-      "id": "4fc3ddc7-a395-41d6-b0b2-4edac41cc76b",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Грицяк Ілона Русланівна",
       "firstName": "Грицяк Ілона Русланівна",
       "lastName": "",
@@ -1047,12 +818,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5de11dcd-59ca-4a14-b58a-b0d68341a21f"
     },
     {
-      "id": "22610ad3-25bb-4439-855f-0d91e84ef5a4",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Куклова Ассія Володимирівна",
       "firstName": "Куклова Ассія Володимирівна",
       "lastName": "",
@@ -1071,12 +842,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "b01a32fb-dea4-43a8-b4dc-0cd0819d21b1"
     },
     {
-      "id": "71aebf12-c2a3-49c6-adf9-fc4fee73d330",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Олійник Поліна",
       "firstName": "Олійник Поліна",
       "lastName": "",
@@ -1095,12 +866,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "c471a1ad-3edb-43d0-94a9-bcb046e80e18"
     },
     {
-      "id": "b70878ce-a37c-4b9c-84f0-cd2f8770a643",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Перевалова Олександра Дмитрівна",
       "firstName": "Перевалова Олександра Дмитрівна",
       "lastName": "",
@@ -1119,12 +890,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a2583a2b-c6e3-4e88-bfa2-3bffd20e919f"
     },
     {
-      "id": "35f69d74-2bb7-47d5-8062-52961d33dd76",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Фаталієва Аня",
       "firstName": "Фаталієва Аня",
       "lastName": "",
@@ -1143,12 +914,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e6676b20-16f0-448b-908c-a7b9f2109b24"
     },
     {
-      "id": "25d4c233-a51f-442d-b09b-2270db3781b4",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Герасимчук Анастасія",
       "firstName": "Герасимчук Анастасія",
       "lastName": "",
@@ -1167,12 +938,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "49548236-1067-47d5-a1de-48aa6f5086eb"
     },
     {
-      "id": "91323804-fd9a-4d0c-9c21-0040c38d3fa7",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Бухман Марія Юріївна",
       "firstName": "Бухман Марія Юріївна",
       "lastName": "",
@@ -1191,12 +962,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "dc294ea3-5d1c-4eb3-85ec-5fdb87fc000d"
     },
     {
-      "id": "6a95fb75-ea9b-41d7-ab0b-9456570b6852",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Бухман Софія",
       "firstName": "Бухман Софія",
       "lastName": "",
@@ -1215,12 +986,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "eeba97d7-1aba-44f8-bacd-d319ac68d584"
     },
     {
-      "id": "84c1cf02-0bfd-4219-8e40-b8ac66934a16",
       "type": "participant",
-      "roleName": "Конкурс",
+      "roleName": "Учасник конкурсу",
       "fullName": "Чернікова Наталя Петрівна",
       "firstName": "Чернікова Наталя Петрівна",
       "lastName": "",
@@ -1239,12 +1010,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e608e62d-c2c0-4f80-b961-12e97ec2d8cb"
     },
     {
-      "id": "7a40b21c-02dd-441b-8bd9-1393aa40ddc0",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Кравчина Олена Василівна",
       "firstName": "Кравчина Олена Василівна",
       "lastName": "",
@@ -1263,12 +1034,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "1170d1e0-b298-4e74-b444-fedda5bcf857"
     },
     {
-      "id": "8375aabb-35f0-4843-b831-df6cc7921a44",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Борозенець Мілана",
       "firstName": "Борозенець Мілана",
       "lastName": "",
@@ -1287,12 +1058,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "64ad2f37-130d-4956-a157-29216c8a6d41"
     },
     {
-      "id": "b940a357-2f4b-4ccf-8fdd-1bb43e41d75d",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Пасічна Марія Михайлівна",
       "firstName": "Пасічна Марія Михайлівна",
       "lastName": "",
@@ -1311,12 +1082,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0dd083df-059f-48f6-96cd-2039b95d759d"
     },
     {
-      "id": "286ca45e-595c-480a-98ab-363508f281ab",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Масальська Діана",
       "firstName": "Масальська Діана",
       "lastName": "",
@@ -1335,12 +1106,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5b749b44-bb24-4001-aecb-2c659ee6d804"
     },
     {
-      "id": "4081e821-062c-4039-a1a3-2ecb1cc5a79e",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Проценко Софія ( колекція Dorosh)",
       "firstName": "Проценко Софія ( колекція Dorosh)",
       "lastName": "",
@@ -1359,12 +1130,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e267a575-6000-4079-9c03-807bd40ef57e"
     },
     {
-      "id": "5d5a25c5-fa05-451a-9fee-0848c22a40af",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Швець Ольга Анатоліївна",
       "firstName": "Швець Ольга Анатоліївна",
       "lastName": "",
@@ -1383,12 +1154,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "1053c383-93fb-4a03-9ef4-198c23d053eb"
     },
     {
-      "id": "62722ac9-2c1c-4c52-88fa-69be3ffbace8",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Кузьменко Владислава Вікторівна",
       "firstName": "Кузьменко Владислава Вікторівна",
       "lastName": "",
@@ -1407,12 +1178,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "b05db261-2f67-417c-83d9-ecba4bd1b51f"
     },
     {
-      "id": "10a41978-c5ab-45ee-8563-da7b630b54ab",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Платонова Ярослава Романівна",
       "firstName": "Платонова Ярослава Романівна",
       "lastName": "",
@@ -1431,12 +1202,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "3eddaa35-1ce9-4c55-83f4-4a709d59a51e"
     },
     {
-      "id": "4b694e07-cfd9-45a6-a831-ad9657fa19a5",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Нікітіна Маргарита Дмитрівна",
       "firstName": "Нікітіна Маргарита Дмитрівна",
       "lastName": "",
@@ -1455,12 +1226,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a782c046-ce65-4204-bf40-31e926832181"
     },
     {
-      "id": "ddc314d1-d28e-40b1-bcd5-2462fb2d6859",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Трофанчук Валерія Володимирівна",
       "firstName": "Трофанчук Валерія Володимирівна",
       "lastName": "",
@@ -1479,12 +1250,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5619210f-4228-46c3-88f3-03d48db94719"
     },
     {
-      "id": "e710ced1-09f9-4f9c-85e6-c990b56965d4",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Кіріченко Кіра Ярославівна",
       "firstName": "Кіріченко Кіра Ярославівна",
       "lastName": "",
@@ -1503,12 +1274,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "3eca0d2a-1293-4a1a-af8b-5e34e602824e"
     },
     {
-      "id": "b83581c8-8e20-425b-a87b-dbc2564f4763",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Мартиненко Софія Романівна",
       "firstName": "Мартиненко Софія Романівна",
       "lastName": "",
@@ -1527,12 +1298,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5a0ada72-3e1f-4392-bee7-7fe95142a888"
     },
     {
-      "id": "cb9c0f41-5d09-4c3e-a2e2-8bb424d7870e",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Антонюк Евеліна Василівна",
       "firstName": "Антонюк Евеліна Василівна",
       "lastName": "",
@@ -1551,12 +1322,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "9e17475b-0a4a-4ec6-86bd-3ddf1a177473"
     },
     {
-      "id": "bbfb874d-fd6e-4d12-b010-53ef9d305dd5",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Сапицька Анастасія Максимівна",
       "firstName": "Сапицька Анастасія Максимівна",
       "lastName": "",
@@ -1575,12 +1346,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "80ea80fa-473f-4e48-9013-3ceaab80b283"
     },
     {
-      "id": "4fa0e1d1-df8f-4e6a-a91f-d9d5e34b7f26",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Сидоренко Злата Євгенівна",
       "firstName": "Сидоренко Злата Євгенівна",
       "lastName": "",
@@ -1599,12 +1370,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7c9d5099-95c9-409e-bbe7-c1bd5327192a"
     },
     {
-      "id": "d78deeca-921b-4843-80fb-2b5ba47daed2",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Нагордна Злата Андріївна",
       "firstName": "Нагордна Злата Андріївна",
       "lastName": "",
@@ -1623,12 +1394,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "8b62e464-f14d-4eb7-94ca-a2a3e5541a95"
     },
     {
-      "id": "2fb63746-6844-4292-9bf6-bc97c5fb2ca1",
       "type": "participant",
-      "roleName": "Учасник / Модель",
+      "roleName": "Учасник показу",
       "fullName": "Іванова Діана Юріївна",
       "firstName": "Іванова Діана Юріївна",
       "lastName": "",
@@ -1647,10 +1418,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "939111c3-f035-48ad-9bea-c26ba67ec077"
     },
     {
-      "id": "30d99033-2a08-4faa-bf7b-cf4dc38cde90",
       "type": "partner",
       "roleName": "Партнер / Спонсор",
       "fullName": "Хомин Марʼяна Михайлівна",
@@ -1666,10 +1437,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "262b60c4-4afe-4a59-935b-0839811d70d4"
     },
     {
-      "id": "3fe40363-afff-448d-b5ca-f01bceec33cf",
       "type": "partner",
       "roleName": "Партнер / Спонсор",
       "fullName": "Сегеда Юлія Вікторівна",
@@ -1685,30 +1456,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "30f262ea-c7bf-4067-bb6d-1d3e86e6c1c7"
     },
     {
-      "id": "547afd16-132f-4f5d-889f-557bcebbacbc",
-      "type": "photographer",
-      "roleName": "Фотограф",
-      "fullName": "Міліція Оксана Василівна",
-      "firstName": "Міліція Оксана Василівна",
-      "lastName": "",
-      "organization": "@Oksanamil.ph",
-      "phone": "+380684816579",
-      "category": "Фотограф",
-      "instagram": "Oksanamil.ph",
-      "telegram": "@oksanamilitsiia",
-      "portfolio": "https://oksanamil.pixover.gallery/7129-moiroboty",
-      "sourceSheet": "Фотографивідеографи",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "55bc009d-18df-4132-9243-1b8111bd91b2",
       "type": "designer",
       "roleName": "Дизайнер",
       "fullName": "Дорош Наталія Валеріївна",
@@ -1725,10 +1476,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "bca0edec-5ac1-44ab-85cf-d5b3ab1c79f8"
     },
     {
-      "id": "5d04f971-e3e7-4d1a-84b0-ec8de09fe408",
       "type": "collective_member",
       "roleName": "Керівник колективу",
       "fullName": "Вінеєва Лариса Олексіївна (\"ART'elь moda\")",
@@ -1746,12 +1497,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "9229a2a7-23dd-4bab-a956-a4186c6fddea"
     },
     {
-      "id": "fb7b8164-4a4f-4306-a9aa-e64ef9948233",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 1 — \"ART'elь moda\"",
       "firstName": "Учасник 1",
       "lastName": "\"ART'elь moda\"",
@@ -1765,12 +1516,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "152e86f9-8c13-4983-b593-1c1d1cbcba8a"
     },
     {
-      "id": "a400c32f-fdd1-4fa3-a06e-d7de90a28885",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 2 — \"ART'elь moda\"",
       "firstName": "Учасник 2",
       "lastName": "\"ART'elь moda\"",
@@ -1784,12 +1535,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "6dc85ff8-8451-4571-a7ca-8cc8798f5299"
     },
     {
-      "id": "5d73658c-ae0e-4d9e-9b0d-0e4c4ab45114",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 3 — \"ART'elь moda\"",
       "firstName": "Учасник 3",
       "lastName": "\"ART'elь moda\"",
@@ -1803,12 +1554,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "bbdcb78c-e03e-4162-bb42-3624cdc1ec7a"
     },
     {
-      "id": "80393a0d-b537-4afd-9f1d-2a402ab9de5a",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 4 — \"ART'elь moda\"",
       "firstName": "Учасник 4",
       "lastName": "\"ART'elь moda\"",
@@ -1822,12 +1573,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5d1271fd-0947-4435-8d24-88074a519b14"
     },
     {
-      "id": "5568374e-50d5-4801-ae11-f8f2990a98a0",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 5 — \"ART'elь moda\"",
       "firstName": "Учасник 5",
       "lastName": "\"ART'elь moda\"",
@@ -1841,12 +1592,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "97f656e9-ed0c-4d1b-a6be-8e9bc5d94368"
     },
     {
-      "id": "d733a6b8-e959-4ab5-b2d0-ed266320e821",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 6 — \"ART'elь moda\"",
       "firstName": "Учасник 6",
       "lastName": "\"ART'elь moda\"",
@@ -1860,12 +1611,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "8d713551-104c-4a68-8349-93b7072597f1"
     },
     {
-      "id": "9a47022b-a568-4213-a47f-d44eedaa3fc6",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 7 — \"ART'elь moda\"",
       "firstName": "Учасник 7",
       "lastName": "\"ART'elь moda\"",
@@ -1879,12 +1630,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "06991c91-d368-428b-9106-083c1f4e1276"
     },
     {
-      "id": "7a76480e-8a48-43fa-b36b-68a11a15a484",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 8 — \"ART'elь moda\"",
       "firstName": "Учасник 8",
       "lastName": "\"ART'elь moda\"",
@@ -1898,12 +1649,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "4591d4ce-af80-46c3-979c-20bda12c9a72"
     },
     {
-      "id": "43d93858-0148-41ae-b578-82c00a23beac",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 9 — \"ART'elь moda\"",
       "firstName": "Учасник 9",
       "lastName": "\"ART'elь moda\"",
@@ -1917,12 +1668,12 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a572231e-55a4-42c3-9211-d43d6e909b18"
     },
     {
-      "id": "964d0498-4aab-477c-8d62-4ede7e93066f",
       "type": "collective_member",
-      "roleName": "Член колективу",
+      "roleName": "Учасник колективу",
       "fullName": "Учасник 10 — \"ART'elь moda\"",
       "firstName": "Учасник 10",
       "lastName": "\"ART'elь moda\"",
@@ -1936,10 +1687,86 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "854e3ccb-352b-40f6-a30a-d6e48d1feddc"
     },
     {
-      "id": "f08efee9-75fd-4ea7-9d76-566d6e2e7b42",
+      "type": "guest",
+      "roleName": "Запрошений гість",
+      "fullName": "Тищук Олексій Олександрович",
+      "firstName": "Тищук Олексій Олександрович",
+      "lastName": "",
+      "organization": "Дочка відвідує Top children, Аріна Тищук",
+      "phone": "+380951275793",
+      "category": "Гість",
+      "instagram": "tyshchuk_alexey",
+      "telegram": "0951275793",
+      "sourceSheet": "Гості",
+      "qrGenerated": true,
+      "checkedIn": false,
+      "checkedInAt": null,
+      "accessDenied": false,
+      "accessDeniedAt": null,
+      "id": "2b268b1f-3048-49f5-9d4e-084dbd0c1c3f"
+    },
+    {
+      "type": "guest",
+      "roleName": "Запрошений гість",
+      "fullName": "Харкавий Дмитро",
+      "firstName": "Харкавий Дмитро",
+      "lastName": "",
+      "organization": "Донечка приймає участь",
+      "phone": "+380687707067",
+      "category": "Гість",
+      "instagram": "https://www.instagram.com/dashasmile1212?igsh=bHpvc21qbndmbHo0",
+      "telegram": "0 (68) 770 70 67",
+      "sourceSheet": "Гості",
+      "qrGenerated": true,
+      "checkedIn": false,
+      "checkedInAt": null,
+      "accessDenied": false,
+      "accessDeniedAt": null,
+      "id": "e7ecda28-16b7-4776-b90f-ca0b6ab286ef"
+    },
+    {
+      "type": "guest",
+      "roleName": "Запрошений гість",
+      "fullName": "Самсонова Вероніка",
+      "firstName": "Самсонова Вероніка",
+      "lastName": "",
+      "organization": "Реклама instagram",
+      "phone": "+380981242035",
+      "category": "Гість",
+      "instagram": "@vervillv",
+      "telegram": "@vervill37",
+      "sourceSheet": "Гості",
+      "qrGenerated": true,
+      "checkedIn": false,
+      "checkedInAt": null,
+      "accessDenied": false,
+      "accessDeniedAt": null,
+      "id": "a539ca56-f6e2-4193-9f5b-688debe60e48"
+    },
+    {
+      "type": "guest",
+      "roleName": "Запрошений гість",
+      "fullName": "Матвійчук Кіра",
+      "firstName": "Матвійчук Кіра",
+      "lastName": "",
+      "organization": "Реклама",
+      "phone": "+380677020685",
+      "category": "Гість",
+      "instagram": "@matvvk",
+      "telegram": "@matvvk",
+      "sourceSheet": "Гості",
+      "qrGenerated": true,
+      "checkedIn": false,
+      "checkedInAt": null,
+      "accessDenied": false,
+      "accessDeniedAt": null,
+      "id": "009089f5-1ed1-4377-b59d-6fc3170f9e7b"
+    },
+    {
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Софія Шамія",
@@ -1955,10 +1782,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5cf5db23-8c29-4818-8780-9767bd286f29"
     },
     {
-      "id": "ec628d76-b241-4835-b5c5-3cc0f78a7974",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Анастасія Міщенко",
@@ -1974,10 +1801,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "2ba0d4b2-56c9-404e-9220-d93776c31ba3"
     },
     {
-      "id": "fe27c827-5d34-4e69-ab30-283ad2f1dc04",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Анна Кудряшова",
@@ -1993,10 +1820,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "aae82c0b-f6bc-4364-bbe9-ba2a327a7334"
     },
     {
-      "id": "98d4d5a5-729e-452a-931e-2a6a57cce331",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Дмитрій Руденко",
@@ -2012,10 +1839,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "721619fc-413e-4e6f-b1f5-767dbf2e8ffd"
     },
     {
-      "id": "0f5f93c3-ac2d-411d-ab44-88d3b42c77ac",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Анна Гуня",
@@ -2031,10 +1858,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "3a067bbc-6c72-420b-8c6e-a4a10e1b52ae"
     },
     {
-      "id": "ce2723c6-0094-45bd-96b2-467ba8698c03",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Олександр Мацкул",
@@ -2050,10 +1877,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "58a1523c-503e-4882-9f3f-a55e3ba350d8"
     },
     {
-      "id": "a8a9157b-eb31-41bf-8744-532534717acc",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Вікторія Демидовська",
@@ -2069,10 +1896,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "29f11975-1eac-44a7-a1cb-faada541a0cd"
     },
     {
-      "id": "3b91f116-17aa-48da-8490-ab855fb792b9",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Олена Чабак",
@@ -2088,10 +1915,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0531ef5d-c89f-476a-8b89-3a20de9593e4"
     },
     {
-      "id": "d855160e-7156-4214-963f-b02c309f414d",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Андрій Чорновол",
@@ -2107,10 +1934,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0380218e-a6c5-4374-ae67-0c84cbdd7cdf"
     },
     {
-      "id": "35c37378-2b5a-49f3-8dce-635c5a9110a2",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Олександра",
@@ -2126,10 +1953,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "1d298f82-be5e-4b14-afb1-64d67c023a5f"
     },
     {
-      "id": "8c4cc671-7f7e-4c78-b82c-cdb8a403a995",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Данилевська Юлія",
@@ -2145,10 +1972,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "d4bd599f-d055-404d-8ac4-2b1f99d30623"
     },
     {
-      "id": "ba58eb73-a4a6-473c-b755-be86e3abc969",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Фесенко Ярослава",
@@ -2164,10 +1991,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "8597d725-795a-49a8-8be5-216170288949"
     },
     {
-      "id": "0e257aba-ef2c-4f6b-b72f-b96bc42f2e9c",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Біда Анжела Віталіївна",
@@ -2183,10 +2010,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "a8a32f45-a6d8-4448-8854-c81d621f22a8"
     },
     {
-      "id": "65e00714-8ab2-49c2-b08d-ade3910c40fc",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Браткова Ніколь Костянтинівна",
@@ -2202,10 +2029,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "cbff0946-2309-44c8-962d-56783b7795d6"
     },
     {
-      "id": "f390c9d5-254e-4c92-85b9-fdfe6ea0b01f",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Біда Аліна Віталіївна",
@@ -2221,29 +2048,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "b1ff1170-3c0a-4182-ada1-8e8263753a3d"
     },
     {
-      "id": "c7ec42f3-a786-413e-b751-08a7fe8a341b",
-      "type": "guest",
-      "roleName": "Запрошений гість",
-      "fullName": "Кузьменко Владислава Вікторівна",
-      "firstName": "Кузьменко Владислава Вікторівна",
-      "lastName": "",
-      "organization": "Гість фестивалю",
-      "phone": "",
-      "category": "Гість",
-      "instagram": "",
-      "telegram": "",
-      "sourceSheet": "Гості",
-      "qrGenerated": true,
-      "checkedIn": false,
-      "checkedInAt": null,
-      "accessDenied": false,
-      "accessDeniedAt": null
-    },
-    {
-      "id": "dcd2ccad-48cc-4d43-81a6-3937e4f8bf60",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Клишкіна Поліна Вікторівна",
@@ -2259,10 +2067,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "da03f231-1553-40de-9683-79ef34ad0ffc"
     },
     {
-      "id": "97019158-9a51-44ad-b4aa-2806046f309b",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Васьковська Вікторія Вікторівна",
@@ -2278,10 +2086,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7419b4d0-5dbf-42cb-8fad-24b2ef483dc5"
     },
     {
-      "id": "ff3a854e-97da-4e86-bfe2-4e76dc5b9df7",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Коваленко Євгенія Юріївна",
@@ -2297,10 +2105,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "95483bb6-f1bb-46c6-822b-f3a4444e190d"
     },
     {
-      "id": "1f50cff0-eb4c-472d-8310-bceb3c55ebda",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Лавелс Софія Олександрівна",
@@ -2316,10 +2124,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "91f0b86f-ba35-4822-adb8-6855b3cfa30f"
     },
     {
-      "id": "59f32fb7-4af9-4c1c-8fa8-018fb7ffaf91",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Пилипенко Наталія Ігорівна",
@@ -2335,10 +2143,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "529b32e6-e3d6-4c50-a5da-e8852a81de9b"
     },
     {
-      "id": "1f8d5e9a-9846-4ce1-ba36-5d8c253b6d3f",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Петрова Майя Вікторівна",
@@ -2354,10 +2162,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e5b9f956-2032-4318-a43d-b47f1ed7f28f"
     },
     {
-      "id": "ecf19abc-a681-493d-b6fd-05b7b613e7c5",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Охріменко Таня",
@@ -2373,10 +2181,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "51492e9f-e9b2-4e25-9665-ddd5734168ea"
     },
     {
-      "id": "6aec426e-282b-4f22-b768-6e7813fd2cdd",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Олексій",
@@ -2392,10 +2200,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "0da2026c-7959-419a-86c0-8313e0077e0b"
     },
     {
-      "id": "40e3e906-fa33-4505-91fa-2de663d9e367",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Назаров Денис",
@@ -2411,10 +2219,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "7626eea9-608d-491e-8850-db6b10ad584a"
     },
     {
-      "id": "e2740397-6856-426b-9af4-8cdfc281f0d1",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Щетинін Нікіта",
@@ -2430,10 +2238,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "4af25fb6-d9d9-47f2-b13d-05e1332b01b8"
     },
     {
-      "id": "0c0e1404-5c79-42ec-bf59-33576d3bcbe9",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Науменко Саша",
@@ -2449,10 +2257,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "e4b03068-1e0e-4432-a640-6fba4bc2880f"
     },
     {
-      "id": "c7fb3182-6944-4633-ab64-905160432fbc",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Волонтери",
@@ -2468,10 +2276,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "52e4bbc0-26df-4a39-b889-40df0fdf53f8"
     },
     {
-      "id": "f237135b-2b17-4e38-9658-56da3f1a026a",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Судак Анна",
@@ -2487,10 +2295,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "db1416b4-3674-44ca-bc47-46caddb19e60"
     },
     {
-      "id": "e8c8ddca-c275-4c70-a92d-9cba3585b81b",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Яцук Віктор Андрійович",
@@ -2506,10 +2314,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "139b0027-058a-4533-9fa7-e5e9f06bd7c1"
     },
     {
-      "id": "da75590e-329a-4e04-9dea-7e665f5f63c4",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Литвинчук Дарина Андріївна",
@@ -2525,10 +2333,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "5eeb4593-ab67-4583-aebf-b0c6b7691b99"
     },
     {
-      "id": "4d4ae450-7fb4-4483-871b-965ac0fd11ec",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Ванюшова ДаринаВолодимирівна",
@@ -2544,10 +2352,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "af09efeb-7390-427b-8615-0c4800c5dbe2"
     },
     {
-      "id": "ad4d632a-fad7-42a5-bce2-b11e271d8e21",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Корзун Іванна Сергіївна",
@@ -2563,10 +2371,10 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "71923642-1832-426a-a393-a2b695243cff"
     },
     {
-      "id": "c27e73da-c5e8-4b0f-ac6d-021aff14f476",
       "type": "guest",
       "roleName": "Запрошений гість",
       "fullName": "Савченко Анжеліка Андріївна",
@@ -2582,7 +2390,8 @@
       "checkedIn": false,
       "checkedInAt": null,
       "accessDenied": false,
-      "accessDeniedAt": null
+      "accessDeniedAt": null,
+      "id": "189374f0-81be-4326-9db9-08fbda4def83"
     }
   ],
   "scanLog": []

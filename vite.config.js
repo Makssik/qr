@@ -35,6 +35,15 @@ function cleanStr(val) {
   return String(val).trim();
 }
 
+function normalizeName(name) {
+  if (!name) return '';
+  return String(name)
+    .toLowerCase()
+    .replace(/[«»"'`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function normalizePhone(phone) {
   if (!phone) return '';
   let str = String(phone).trim().replace(/[^\d+]/g, '');
@@ -44,16 +53,30 @@ function normalizePhone(phone) {
   return str;
 }
 
+const TYPE_PRIORITY = {
+  designer: 6,
+  photographer: 5,
+  partner: 4,
+  collective_member: 3,
+  participant: 2,
+  guest: 1
+};
+
 export async function parseGoogleSheetWorkbook(buffer) {
   const wb = XLSX.read(buffer, { type: 'buffer' });
-  const participants = [];
+  const rawList = [];
 
   for (const sheetName of wb.SheetNames) {
     const ws = wb.Sheets[sheetName];
     const rawRows = XLSX.utils.sheet_to_json(ws, { defval: '' });
     const normSheetName = sheetName.trim().toLowerCase();
 
-    // 1. УЧАСНИКИ / МОДЕЛІ (Учасники, Учасники конкурс, Відеовізитівка)
+    // Skip raw Google Form backup sheets that duplicate primary sheets
+    if (normSheetName.includes('ответы на форму') || normSheetName.includes('заявки на участь дизайнери')) {
+      continue;
+    }
+
+    // 1. УЧАСНИКИ / МОДЕЛІ (Учасники, Відеовізитівка)
     if (normSheetName.includes('учасник') || normSheetName.includes('відеовізитівка')) {
       for (const r of rawRows) {
         const fullName = cleanStr(r['ПІБ учасника'] || r['ПІБ дитини'] || r['ПІБ'] || r["Ім'я"]);
@@ -72,8 +95,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const isContest = participation.toLowerCase().includes('конкурс') || normSheetName.includes('конкурс');
         const roleName = isContest ? 'Учасник конкурсу' : 'Учасник показу';
 
-        participants.push({
-          id: `part-${crypto.randomBytes(8).toString('hex')}`,
+        rawList.push({
           type: 'participant',
           roleName,
           fullName,
@@ -99,7 +121,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
       }
     }
 
-    // 2. ДИЗАЙНЕРИ (Дизайнери, Заявки на участь дизайнери)
+    // 2. ДИЗАЙНЕРИ (Дизайнери)
     else if (normSheetName.includes('дизайн')) {
       for (const r of rawRows) {
         const fullName = cleanStr(r['ПІБ кандидата'] || r['ПІБ'] || r['ПІБ учасника']);
@@ -113,8 +135,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const telegram = cleanStr(r['Імʼя користувача в телеграм '] || r['Telegram'] || '');
         const nomination = cleanStr(r['Категорія в якій номінуєтесь'] || 'Дизайнер');
 
-        participants.push({
-          id: `des-${crypto.randomBytes(8).toString('hex')}`,
+        rawList.push({
           type: 'designer',
           roleName: 'Дизайнер',
           fullName,
@@ -148,8 +169,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const telegram = cleanStr(r['Імʼя користувача в телеграм '] || r['Telegram'] || '');
         const portfolio = cleanStr(r['Посилання на портфоліо'] || '');
 
-        participants.push({
-          id: `photo-${crypto.randomBytes(8).toString('hex')}`,
+        rawList.push({
           type: 'photographer',
           roleName: activity.toLowerCase().includes('відео') ? 'Відеограф' : 'Фотограф',
           fullName,
@@ -183,8 +203,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const instagram = cleanStr(r['Сторінка в інстаграм'] || r['Instagram'] || '');
         const telegram = cleanStr(r['Імʼя користувача в телеграм '] || r['Telegram'] || '');
 
-        participants.push({
-          id: `partn-${crypto.randomBytes(8).toString('hex')}`,
+        rawList.push({
           type: 'partner',
           roleName: 'Партнер / Спонсор',
           fullName,
@@ -216,9 +235,8 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const instagram = cleanStr(r['Сторінка Instagram колективу'] || '');
         const telegram = cleanStr(r['Імʼя користувача в телеграм керівника'] || '');
 
-        // 1. Leader Ticket
-        participants.push({
-          id: `col-lead-${crypto.randomBytes(8).toString('hex')}`,
+        // Leader Ticket
+        rawList.push({
           type: 'collective_member',
           roleName: 'Керівник колективу',
           fullName: leaderName ? `${leaderName} (${collectiveName})` : `Керівник — ${collectiveName}`,
@@ -239,10 +257,9 @@ export async function parseGoogleSheetWorkbook(buffer) {
           accessDeniedAt: null
         });
 
-        // 2. Member Tickets
+        // Member Tickets
         for (let i = 1; i <= count; i++) {
-          participants.push({
-            id: `col-${crypto.randomBytes(8).toString('hex')}`,
+          rawList.push({
             type: 'collective_member',
             roleName: 'Учасник колективу',
             fullName: `Учасник ${i} — ${collectiveName}`,
@@ -264,8 +281,8 @@ export async function parseGoogleSheetWorkbook(buffer) {
       }
     }
 
-    // 6. ГОСТІ ТА ГЛЯДАЧІ (Гості, Ответы на форму (9))
-    else if (normSheetName.includes('гост') || normSheetName.includes('ответы')) {
+    // 6. ГОСТІ ТА ГЛЯДАЧІ (Гості)
+    else if (normSheetName.includes('гост')) {
       for (const r of rawRows) {
         const fullName = cleanStr(r['Прізвище та Ім\'я'] || r['ПІБ'] || r['ПІБ гостя'] || r["Ім'я"]);
         if (!fullName) continue;
@@ -275,8 +292,7 @@ export async function parseGoogleSheetWorkbook(buffer) {
         const instagram = cleanStr(r['Instagram'] || '');
         const reason = cleanStr(r['Як дізнались про нас?'] || 'Гість фестивалю');
 
-        participants.push({
-          id: `guest-${crypto.randomBytes(8).toString('hex')}`,
+        rawList.push({
           type: 'guest',
           roleName: 'Запрошений гість',
           fullName,
@@ -298,23 +314,50 @@ export async function parseGoogleSheetWorkbook(buffer) {
     }
   }
 
-  // Deduplication by full name + type
-  const uniqueMap = new Map();
-  for (const p of participants) {
-    const key = `${p.type}:${p.fullName.toLowerCase().replace(/\s+/g, ' ')}`;
-    if (!uniqueMap.has(key)) {
-      uniqueMap.set(key, p);
+  // --- SMART DEDUPLICATION ---
+  const mergedMap = new Map();
+
+  for (const item of rawList) {
+    const normName = normalizeName(item.fullName);
+    if (!normName) continue;
+
+    const key = item.type === 'collective_member' && item.memberIndex
+      ? `collective:${item.collectiveName}:${item.memberIndex}`
+      : normName;
+
+    if (!mergedMap.has(key)) {
+      mergedMap.set(key, { ...item, id: `att-${crypto.randomBytes(8).toString('hex')}` });
+    } else {
+      const existing = mergedMap.get(key);
+      const existingPrio = TYPE_PRIORITY[existing.type] || 0;
+      const newPrio = TYPE_PRIORITY[item.type] || 0;
+
+      if (newPrio > existingPrio) {
+        mergedMap.set(key, {
+          ...existing,
+          ...item,
+          id: existing.id,
+          organization: item.organization || existing.organization,
+          phone: item.phone || existing.phone,
+          parentName: item.parentName || existing.parentName,
+          parentPhone: item.parentPhone || existing.parentPhone,
+        });
+      } else {
+        if (!existing.phone && item.phone) existing.phone = item.phone;
+        if (!existing.school && item.school) existing.school = item.school;
+        if (!existing.parentName && item.parentName) existing.parentName = item.parentName;
+        if (!existing.parentPhone && item.parentPhone) existing.parentPhone = item.parentPhone;
+      }
     }
   }
 
-  return Array.from(uniqueMap.values());
+  return Array.from(mergedMap.values());
 }
 
 function syncServerPlugin() {
   return {
     name: 'sync-server-plugin',
     configureServer(server) {
-      // Ensure backup directory exists
       if (!fs.existsSync(BACKUP_DIR)) {
         try {
           fs.mkdirSync(BACKUP_DIR, { recursive: true });
@@ -323,7 +366,6 @@ function syncServerPlugin() {
         }
       }
 
-      // Read or initialize Auth Config
       const readAuthConfig = () => {
         try {
           if (fs.existsSync(AUTH_FILE)) {
@@ -353,7 +395,6 @@ function syncServerPlugin() {
         }
       };
 
-      // Read Store
       const readStore = () => {
         try {
           if (fs.existsSync(DATA_FILE)) {
@@ -365,19 +406,16 @@ function syncServerPlugin() {
         return { participants: [], scanLog: [] };
       };
 
-      // Write Store with Auto-Backup
       const writeStore = (data) => {
         try {
           fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 
-          // Save timestamped backup
           if (fs.existsSync(BACKUP_DIR)) {
             const now = new Date();
             const dateStr = now.toISOString().replace(/[:.]/g, '-');
             const backupFile = path.join(BACKUP_DIR, `server-db-${dateStr}.json`);
             fs.writeFileSync(backupFile, JSON.stringify(data, null, 2));
 
-            // Clean old backups (keep last 50)
             const backupFiles = fs.readdirSync(BACKUP_DIR)
               .filter(f => f.startsWith('server-db-') && f.endsWith('.json'))
               .sort();
@@ -395,12 +433,11 @@ function syncServerPlugin() {
         }
       };
 
-      // Google Sheets Fetch & Merge
       const syncGoogleSheetsInternal = async (forceReset = false) => {
         if (isSyncingGSheets) return { status: 'already_syncing' };
         isSyncingGSheets = true;
         try {
-          console.log('[GSheets Sync] Downloading Google Sheet...');
+          console.log('[GSheets Sync] Downloading Google Sheet & running smart deduplication...');
           const buffer = await downloadFile(GOOGLE_SHEET_URL);
           const freshList = await parseGoogleSheetWorkbook(buffer);
           const currentStore = readStore();
@@ -408,27 +445,27 @@ function syncServerPlugin() {
           let resultParticipants = [];
 
           if (forceReset || !currentStore.participants || currentStore.participants.length === 0) {
-            // Fresh import: set fresh list, reset scan log
             resultParticipants = freshList;
             currentStore.participants = resultParticipants;
             if (forceReset) currentStore.scanLog = [];
           } else {
             // Smart Merge: Preserve checkedIn status and existing IDs
             const existingByName = new Map();
-            const existingById = new Map();
 
             for (const p of currentStore.participants) {
-              const nameKey = `${p.type}:${(p.fullName || '').toLowerCase().replace(/\s+/g, ' ')}`;
+              const nameKey = p.type === 'collective_member' && p.memberIndex
+                ? `collective:${p.collectiveName}:${p.memberIndex}`
+                : normalizeName(p.fullName);
               existingByName.set(nameKey, p);
-              existingById.set(String(p.id), p);
             }
 
             for (const freshP of freshList) {
-              const nameKey = `${freshP.type}:${(freshP.fullName || '').toLowerCase().replace(/\s+/g, ' ')}`;
+              const nameKey = freshP.type === 'collective_member' && freshP.memberIndex
+                ? `collective:${freshP.collectiveName}:${freshP.memberIndex}`
+                : normalizeName(freshP.fullName);
               const existing = existingByName.get(nameKey);
 
               if (existing) {
-                // Update info, preserve status & ID
                 resultParticipants.push({
                   ...freshP,
                   id: existing.id,
@@ -439,12 +476,10 @@ function syncServerPlugin() {
                 });
                 existingByName.delete(nameKey);
               } else {
-                // New participant
                 resultParticipants.push(freshP);
               }
             }
 
-            // Keep any manual local participants not in Google Sheet
             for (const manualP of existingByName.values()) {
               if (manualP.sourceSheet === undefined) {
                 resultParticipants.push(manualP);
@@ -456,7 +491,7 @@ function syncServerPlugin() {
 
           writeStore(currentStore);
           lastGSheetSyncTime = new Date().toISOString();
-          console.log(`[GSheets Sync] Success! Total participants: ${resultParticipants.length}`);
+          console.log(`[GSheets Sync] Success! Total deduplicated participants: ${resultParticipants.length}`);
 
           return {
             success: true,
@@ -471,7 +506,6 @@ function syncServerPlugin() {
         }
       };
 
-      // Helper to validate token from request header
       const authenticateRequest = (req) => {
         const token = req.headers['x-auth-token'] || (req.headers['authorization'] || '').replace(/^Bearer\s+/i, '');
         if (!token) return null;
@@ -493,14 +527,6 @@ function syncServerPlugin() {
       const gsheetInterval = setInterval(() => {
         syncGoogleSheetsInternal(false);
       }, 2 * 60 * 1000);
-
-      // Perform initial sync on server startup if database is empty
-      setTimeout(() => {
-        const s = readStore();
-        if (!s.participants || s.participants.length <= 43) {
-          syncGoogleSheetsInternal(true);
-        }
-      }, 1000);
 
       // Middleware handler
       server.middlewares.use((req, res, next) => {
@@ -567,7 +593,7 @@ function syncServerPlugin() {
               }
 
               const token = `${role}_${crypto.randomBytes(24).toString('hex')}`;
-              const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
+              const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
 
               auth.sessions = auth.sessions || {};
               auth.sessions[token] = {
@@ -662,7 +688,6 @@ function syncServerPlugin() {
                 const incoming = JSON.parse(body || '{}');
                 const currentStore = readStore();
 
-                // Scanner role protection against clearing DB
                 if (authResult.role === 'scanner' && (incoming._clearParticipants || incoming._clearScanLog)) {
                   res.statusCode = 403;
                   res.setHeader('Content-Type', 'application/json');

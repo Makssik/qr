@@ -1,6 +1,7 @@
 /**
- * Simple hash-based SPA router for QR Event Manager.
+ * Simple hash-based SPA router with Authentication Guards for QR Event Manager.
  */
+import { isAuthenticated, isAdmin, isScanner } from './data/auth.js';
 
 const routes = {};
 let currentPage = null;
@@ -38,11 +39,54 @@ export function initRouter(container) {
   pageContainer = container;
 
   window.addEventListener('hashchange', () => handleRoute());
+  window.addEventListener('auth-changed', () => handleRoute());
   handleRoute();
 }
 
-async function handleRoute() {
-  const path = getCurrentRoute();
+export async function handleRoute() {
+  let path = getCurrentRoute();
+
+  // --- AUTH ROUTE GUARDS ---
+  const authenticated = isAuthenticated();
+
+  if (!authenticated) {
+    if (path !== 'login') {
+      window.location.hash = 'login';
+      return;
+    }
+  } else {
+    // If logged in and on 'login', redirect to home page
+    if (path === 'login') {
+      window.location.hash = isAdmin() ? 'dashboard' : 'scanner';
+      return;
+    }
+
+    // Role restrictions for scanner/controller: only allow scanner and qrcodes
+    if (isScanner()) {
+      const allowedScannerRoutes = ['scanner', 'qrcodes'];
+      if (!allowedScannerRoutes.includes(path)) {
+        window.location.hash = 'scanner';
+        return;
+      }
+    }
+  }
+
+  // Toggle layout visibility (hide sidebar on login page)
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+  const mobileHeader = document.querySelector('.mobile-header');
+
+  if (path === 'login') {
+    if (sidebar) sidebar.style.display = 'none';
+    if (mainContent) mainContent.style.marginLeft = '0';
+    if (mobileHeader) mobileHeader.style.display = 'none';
+    document.body.classList.add('login-active');
+  } else {
+    if (sidebar) sidebar.style.display = '';
+    if (mainContent) mainContent.style.marginLeft = '';
+    if (mobileHeader) mobileHeader.style.display = '';
+    document.body.classList.remove('login-active');
+  }
 
   // Update nav active state
   document.querySelectorAll('.nav-item').forEach(item => {

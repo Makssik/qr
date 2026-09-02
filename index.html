@@ -24,49 +24,68 @@
           </svg>
         </button>
       </div>
+
       <nav class="nav" id="mainNav">
-        <a href="#dashboard" class="nav-item active" data-page="dashboard">
+        <a href="#dashboard" class="nav-item active" data-page="dashboard" data-roles="admin">
           <span class="nav-icon">📊</span>
           <span class="nav-label">Дашборд</span>
         </a>
-        <a href="#import" class="nav-item" data-page="import">
+        <a href="#import" class="nav-item" data-page="import" data-roles="admin">
           <span class="nav-icon">📥</span>
           <span class="nav-label">Імпорт</span>
         </a>
-        <a href="#participants" class="nav-item" data-page="participants">
+        <a href="#participants" class="nav-item" data-page="participants" data-roles="admin">
           <span class="nav-icon">👥</span>
           <span class="nav-label">Учасники</span>
         </a>
-        <a href="#collectives" class="nav-item" data-page="collectives">
+        <a href="#collectives" class="nav-item" data-page="collectives" data-roles="admin">
           <span class="nav-icon">🏫</span>
           <span class="nav-label">Колективи</span>
         </a>
-        <a href="#qrcodes" class="nav-item" data-page="qrcodes">
+        <a href="#qrcodes" class="nav-item" data-page="qrcodes" data-roles="admin,scanner">
           <span class="nav-icon">🏷️</span>
           <span class="nav-label">QR Коди</span>
         </a>
-        <a href="#scanner" class="nav-item" data-page="scanner">
+        <a href="#scanner" class="nav-item" data-page="scanner" data-roles="admin,scanner">
           <span class="nav-icon">📷</span>
           <span class="nav-label">Сканер</span>
         </a>
-        <a href="#log" class="nav-item" data-page="log">
+        <a href="#log" class="nav-item" data-page="log" data-roles="admin">
           <span class="nav-icon">📋</span>
           <span class="nav-label">Журнал</span>
         </a>
       </nav>
+
       <div class="sidebar-footer">
-        <button class="btn-danger" id="clearDataBtn">
-          <span>🗑️</span>
-          <span class="nav-label">Очистити дані</span>
-        </button>
+        <div class="user-role-badge" id="userRoleBadge">
+          <span class="role-icon" id="roleIcon">👤</span>
+          <span class="role-text" id="roleText">Авторизовано</span>
+        </div>
+
+        <div class="footer-actions">
+          <button class="btn-ghost btn-sm" id="authSettingsBtn" title="Налаштування паролів">
+            <span>⚙️</span>
+            <span class="nav-label">Паролі</span>
+          </button>
+          <button class="btn-danger btn-sm" id="clearDataBtn" title="Очистити всі дані">
+            <span>🗑️</span>
+            <span class="nav-label">Очистити</span>
+          </button>
+          <button class="btn-ghost btn-sm" id="logoutBtn" title="Вийти з акаунта" style="color: var(--error);">
+            <span>🚪</span>
+            <span class="nav-label">Вийти</span>
+          </button>
+        </div>
       </div>
     </aside>
+
     <main class="main-content" id="mainContent">
       <div class="page-container" id="pageContainer">
         <!-- Pages rendered here by router -->
       </div>
     </main>
   </div>
+
   <div class="toast-container" id="toastContainer"></div>
   <script type="module" src="/src/main.js"></script>
 </body>

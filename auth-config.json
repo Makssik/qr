@@ -1,0 +1,16 @@
+{
+  "adminPassword": "admin",
+  "scannerPin": "1234",
+  "sessions": {
+    "scanner_adc4e272872428a480bd1c555adeb6c2ea7a106a6667ff9e": {
+      "role": "scanner",
+      "createdAt": 1788357749272,
+      "expiresAt": 1788962549272
+    },
+    "admin_ca7a9c58313fdf6f123a11227d4185b9c3eb49d58c7fad18": {
+      "role": "admin",
+      "createdAt": 1788357749281,
+      "expiresAt": 1788962549281
+    }
+  }
+}

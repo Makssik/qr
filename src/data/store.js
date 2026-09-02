@@ -1,16 +1,19 @@
 import { get, set, del, clear } from 'idb-keyval';
+import { fetchWithAuth, isAuthenticated } from './auth.js';
 
 const PARTICIPANTS_KEY = 'participants';
 const SCAN_LOG_KEY = 'scanLog';
 
 // Helper to push state to server /api/sync
 async function pushToServer(participants, scanLog, flags = {}) {
+  if (!isAuthenticated()) return;
+
   try {
     const payload = { ...flags };
     if (participants !== null && participants !== undefined) payload.participants = participants;
     if (scanLog !== null && scanLog !== undefined) payload.scanLog = scanLog;
 
-    await fetch('/api/sync', {
+    await fetchWithAuth('/api/sync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -23,8 +26,10 @@ async function pushToServer(participants, scanLog, flags = {}) {
 
 // Helper to pull state from server /api/sync and update IndexedDB
 export async function syncWithServer() {
+  if (!isAuthenticated()) return;
+
   try {
-    const res = await fetch('/api/sync');
+    const res = await fetchWithAuth('/api/sync');
     if (!res.ok) return;
 
     const serverData = await res.json();
